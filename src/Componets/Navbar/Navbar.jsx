@@ -8,6 +8,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { isSidebarCollapsed } from "../../Redux/collapse";
 import { useNavigate } from "react-router-dom";
 import { setSelected } from "../../Redux/Selected";
+import { FaRegBell } from "react-icons/fa";
+import Badge from "@mui/material/Badge";
 const Navbar = () => {
   const dispatch = useDispatch();
   const { isCollapsed } = useSelector((state) => state);
@@ -49,6 +51,24 @@ const Navbar = () => {
                 navigate("/Settings");
               }}
             />
+          </IconButton>{" "}
+          <IconButton
+            onClick={() => {
+              dispatch(setSelected("Notifications"));
+            }}
+          >
+            <Badge
+              badgeContent={4}
+              sx={{
+                "& .MuiBadge-badge": {
+                  backgroundColor: "red",
+                  color: "white",
+                  fontSize: "15px",
+                },
+              }}
+            >
+              <FaRegBell />
+            </Badge>
           </IconButton>
         </div>
       </div>

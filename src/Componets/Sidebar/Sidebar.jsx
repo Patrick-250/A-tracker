@@ -12,6 +12,9 @@ import { RiMoneyDollarCircleLine } from "react-icons/ri";
 import { useState } from "react";
 import { setSelected } from "../../Redux/Selected";
 import { useNavigate } from "react-router-dom";
+import { MdOutlineAddShoppingCart } from "react-icons/md";
+import { BsQrCodeScan } from "react-icons/bs";
+import { VscReport } from "react-icons/vsc";
 const SidebarLink = {};
 const Sidebar = () => {
   const { isCollapsed } = useSelector((state) => state);
@@ -19,7 +22,7 @@ const Sidebar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   // const active = true;
-  const [active, setActive] = useState("");
+  const [active, setActive] = useState("dashboard");
   return (
     <div className="sidebar" style={{ width: hide ? "58px" : "280px" }}>
       {/* Top logo */}
@@ -96,11 +99,11 @@ const Sidebar = () => {
           }}
           onClick={() => {
             setActive("companies");
-            dispatch(setSelected("Products"));
+            dispatch(setSelected("Add Products"));
           }}
         >
           <div className="btns">
-            <AiOutlineShoppingCart
+            <MdOutlineAddShoppingCart
               fontSize={30}
               color={active === "companies" ? "white" : "gray"}
             />
@@ -113,7 +116,7 @@ const Sidebar = () => {
                   color: "white",
                 }}
               >
-                Products
+                Create
               </span>
             )}
           </div>
@@ -125,14 +128,14 @@ const Sidebar = () => {
           className="btns-c"
           onClick={() => {
             setActive("posts");
-            dispatch(setSelected("Users"));
+            dispatch(setSelected("Scan Product"));
           }}
           style={{
             backgroundColor: active === "posts" ? "rgb(155, 155, 248)" : "",
           }}
         >
           <div className="btns">
-            <HiOutlineUserGroup
+            <BsQrCodeScan
               fontSize={30}
               color={active === "posts" ? "white" : "gray"}
             />
@@ -145,7 +148,7 @@ const Sidebar = () => {
                   color: "white",
                 }}
               >
-                Users
+                Scan
               </span>
             )}
           </div>
@@ -159,7 +162,7 @@ const Sidebar = () => {
           }}
           onClick={() => {
             setActive("content");
-            dispatch(setSelected("Expenses"));
+            dispatch(setSelected("Report a bug"));
           }}
         >
           <div
@@ -168,7 +171,7 @@ const Sidebar = () => {
               width: "100%",
             }}
           >
-            <RiMoneyDollarCircleLine
+            <VscReport
               fontSize={30}
               color={active === "content" ? "white" : "gray"}
             />
@@ -181,7 +184,7 @@ const Sidebar = () => {
                   color: "White",
                 }}
               >
-                Expenses
+                Report a bug
               </span>
             )}
           </div>
