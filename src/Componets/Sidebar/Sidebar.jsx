@@ -4,7 +4,7 @@ const Sidebar = () => {
   const { isCollapsed } = useSelector((state) => state);
   const hide = isCollapsed.collapsed;
   return (
-    <div className="sidebar" style={{ width: hide ? "50px" : "280px" }}>
+    <div className="sidebar" style={{ width: hide ? "58px" : "280px" }}>
       {/* Top logo */}
       <div className="logo">
         <span className="s-logo">logo</span>
