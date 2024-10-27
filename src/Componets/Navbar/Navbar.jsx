@@ -6,9 +6,13 @@ import { Link } from "react-router-dom";
 import { IconButton } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { isSidebarCollapsed } from "../../Redux/collapse";
+import { useNavigate } from "react-router-dom";
+import { setSelected } from "../../Redux/Selected";
 const Navbar = () => {
   const dispatch = useDispatch();
   const { isCollapsed } = useSelector((state) => state);
+  const { selected } = useSelector((state) => state);
+  const navigate = useNavigate();
   const hide = isCollapsed.collapsed;
   return (
     <div className="navbar" style={{ left: !hide ? "300px" : "80px" }}>
@@ -20,7 +24,7 @@ const Navbar = () => {
         >
           <GiHamburgerMenu />
         </IconButton>
-        <span className="head">Dashbord</span>
+        <span className="head">{selected.value}</span>
       </div>
       <div className="middle">
         <div className="input">
@@ -37,11 +41,15 @@ const Navbar = () => {
         <div className="profile">
           <img src="/images/pic.jpg" alt="" className="avator" />
           <span className="name">Patrick T</span>
-          <Link path={"/Settings"}>
+          <IconButton>
             <IoSettingsOutline
               style={{ fontSize: "25px", color: "gray", cursor: "pointer" }}
+              onClick={() => {
+                dispatch(setSelected("User Profile"));
+                navigate("/Settings");
+              }}
             />
-          </Link>
+          </IconButton>
         </div>
       </div>
     </div>

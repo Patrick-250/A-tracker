@@ -6,11 +6,20 @@ import { HiOutlineUserGroup } from "react-icons/hi2";
 import { MdOutlineRssFeed } from "react-icons/md";
 import { FaRegFlag } from "react-icons/fa";
 import { IoSettingsOutline } from "react-icons/io5";
+import { MdInventory2 } from "react-icons/md";
+import { AiOutlineShoppingCart } from "react-icons/ai";
+import { RiMoneyDollarCircleLine } from "react-icons/ri";
+import { useState } from "react";
+import { setSelected } from "../../Redux/Selected";
+import { useNavigate } from "react-router-dom";
 const SidebarLink = {};
 const Sidebar = () => {
   const { isCollapsed } = useSelector((state) => state);
   const hide = isCollapsed.collapsed;
-  const active = true;
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  // const active = true;
+  const [active, setActive] = useState("");
   return (
     <div className="sidebar" style={{ width: hide ? "58px" : "280px" }}>
       {/* Top logo */}
@@ -18,12 +27,12 @@ const Sidebar = () => {
         <span className="s-logo">logo</span>
         {!hide && <h1 className="h">QLI INVENTORY</h1>}
       </div>
-      {/* liknks */}{" "}
+      {/* liknks */}
       <div className="actions">
         <div
           className="btns-c"
           style={{
-            backgroundColor: active === "dashboard" ? "blue" : "",
+            backgroundColor: active === "dashboard" ? "rgb(155, 155, 248)" : "",
           }}
           onClick={() => {
             setActive("dashboard");
@@ -54,14 +63,14 @@ const Sidebar = () => {
           className="btns-c"
           onClick={() => {
             setActive("users");
-            dispatch(setSelected("Users"));
+            dispatch(setSelected("Inventory"));
           }}
           style={{
-            backgroundColor: active === "users" ? "blue" : "",
+            backgroundColor: active === "users" ? "rgb(155, 155, 248)" : "",
           }}
         >
           <div className="btns">
-            <HiOutlineUserGroup
+            <MdInventory2
               fontSize={30}
               color={active === "users" ? "white" : "gray"}
             />
@@ -83,15 +92,15 @@ const Sidebar = () => {
         <div
           className="btns-c"
           style={{
-            backgroundColor: active === "companies" ? "blue" : "",
+            backgroundColor: active === "companies" ? "rgb(155, 155, 248)" : "",
           }}
           onClick={() => {
             setActive("companies");
-            dispatch(setSelected("Companies"));
+            dispatch(setSelected("Products"));
           }}
         >
           <div className="btns">
-            <HiOutlineUserGroup
+            <AiOutlineShoppingCart
               fontSize={30}
               color={active === "companies" ? "white" : "gray"}
             />
@@ -116,14 +125,14 @@ const Sidebar = () => {
           className="btns-c"
           onClick={() => {
             setActive("posts");
-            dispatch(setSelected("Posts"));
+            dispatch(setSelected("Users"));
           }}
           style={{
-            backgroundColor: active === "posts" ? "blue" : "",
+            backgroundColor: active === "posts" ? "rgb(155, 155, 248)" : "",
           }}
         >
           <div className="btns">
-            <MdOutlineRssFeed
+            <HiOutlineUserGroup
               fontSize={30}
               color={active === "posts" ? "white" : "gray"}
             />
@@ -145,12 +154,12 @@ const Sidebar = () => {
         <div
           className="btns-c"
           style={{
-            backgroundColor: active === "content" ? "blue" : "",
+            backgroundColor: active === "content" ? "rgb(155, 155, 248)" : "",
             paddingRight: 0,
           }}
           onClick={() => {
             setActive("content");
-            dispatch(setSelected("Content Moderation"));
+            dispatch(setSelected("Expenses"));
           }}
         >
           <div
@@ -159,7 +168,7 @@ const Sidebar = () => {
               width: "100%",
             }}
           >
-            <FaRegFlag
+            <RiMoneyDollarCircleLine
               fontSize={30}
               color={active === "content" ? "white" : "gray"}
             />
@@ -172,7 +181,7 @@ const Sidebar = () => {
                   color: "White",
                 }}
               >
-                Moderation
+                Expenses
               </span>
             )}
           </div>
