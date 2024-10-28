@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -9,25 +9,45 @@ import Layout from "./Components/Layout/Layout";
 import Dashboard from "./Pages/Dashboard/Dashboard";
 import Settings from "./Pages/Settings/Settings";
 import Login from "./Pages/Login/Login";
+import Inventory from "./Pages/Inventory/Inventory"; // Import Inventory component
+import ScanAsset from "./Pages/ScanAsset/ScanAsset"; // Import ScanAsset component
 import { useSelector } from "react-redux";
 
 function App() {
   const user = useSelector((state) => state.auth.user); // Get user from Redux store
+  const [scannedAsset, setScannedAsset] = useState(null); // State for scanned asset
 
   return (
     <Router>
       {user ? (
-        <Layout>
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/Settings" element={<Settings />} />
-            <Route path="/Login" element={<Navigate to="/" />} />
-          </Routes>
-        </Layout>
+        <Routes>
+          <Route
+            path="/inventory"
+            element={<Inventory scannedAsset={scannedAsset} />}
+          />{" "}
+          {/* Add Inventory route */}
+          <Route
+            path="/scan-asset"
+            element={<ScanAsset onScanComplete={setScannedAsset} />}
+          />{" "}
+          {/* Add ScanAsset route */}
+          <Route
+            path="*"
+            element={
+              <Layout>
+                <Routes>
+                  <Route path="/" element={<Dashboard />} />
+                  <Route path="/settings" element={<Settings />} />
+                  <Route path="/login" element={<Navigate to="/" />} />
+                </Routes>
+              </Layout>
+            }
+          />
+        </Routes>
       ) : (
         <Routes>
-          <Route path="/Login" element={<Login />} />
-          <Route path="*" element={<Navigate to="/Login" />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="*" element={<Navigate to="/login" />} />
         </Routes>
       )}
     </Router>

@@ -1,73 +1,67 @@
 .cat {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  justify-content: space-around;
-  .h {
-    align-self: flex-start;
-    font-size: 25px;
-    font-weight: bold;
-  }
+  padding: 10px;
+  background-color: #f9f9f9;
 }
-.CatCard {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  background-color: rgb(205, 205, 252);
-  width: 350px;
-  height: 150px;
-  border-radius: 10px;
-  align-self: center;
-  .left {
-    flex: 1;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-evenly;
-    .t {
-      font-size: 20px;
-      font-weight: bold;
-    }
-    .s {
-      font-size: 30px;
-      font-weight: bold;
-    }
-  }
 
-  .right {
-    flex: 1;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-evenly;
-    flex: 1;
-    .c {
-      color: red;
-    }
-    .eye {
-      background-color: rgb(157, 157, 250);
-      width: 70px;
-      height: 70px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 10px;
-      cursor: pointer;
-      .d {
-        color: blue;
-      }
-    }
-  }
+.h {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  display: block;
 }
+
 .card-c {
   display: flex;
   flex-wrap: wrap;
-  width: 100%;
-  align-items: center;
-  //   height: 500px;
   gap: 10px;
-  margin: 0 auto;
+}
+
+.CatCard {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 250px;
+  padding: 10px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.left {
+  display: flex;
+  flex-direction: column;
+}
+
+.t {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.s {
+  font-size: 12px;
+  color: #888;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+}
+
+.eye {
+  margin-right: 5px;
+}
+
+.pc {
+  display: flex;
+  flex-direction: column;
+}
+
+.c {
+  font-size: 12px;
+  color: #555;
+}
+
+.d {
+  color: #007bff;
 }

@@ -1,28 +1,19 @@
 import "./Sidebar.scss";
 import { useDispatch, useSelector } from "react-redux";
-import { MdOutlineDashboard } from "react-icons/md";
-import { IoIosArrowForward } from "react-icons/io";
-import { HiOutlineUserGroup } from "react-icons/hi2";
-import { MdOutlineRssFeed } from "react-icons/md";
-import { FaRegFlag } from "react-icons/fa";
-import { IoSettingsOutline } from "react-icons/io5";
-import { MdInventory2 } from "react-icons/md";
-import { AiOutlineShoppingCart } from "react-icons/ai";
-import { RiMoneyDollarCircleLine } from "react-icons/ri";
+import { MdOutlineDashboard, MdInventory2 } from "react-icons/md";
+import { BsQrCodeScan } from "react-icons/bs";
+import { VscReport } from "react-icons/vsc";
 import { useState } from "react";
 import { setSelected } from "../../Redux/Selected";
 import { useNavigate } from "react-router-dom";
-import { MdOutlineAddShoppingCart } from "react-icons/md";
-import { BsQrCodeScan } from "react-icons/bs";
-import { VscReport } from "react-icons/vsc";
-const SidebarLink = {};
+
 const Sidebar = () => {
   const { isCollapsed } = useSelector((state) => state);
   const hide = isCollapsed.collapsed;
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  // const active = true;
   const [active, setActive] = useState("dashboard");
+
   return (
     <div className="sidebar" style={{ width: hide ? "58px" : "280px" }}>
       {/* Top logo */}
@@ -30,7 +21,7 @@ const Sidebar = () => {
         <span className="s-logo">logo</span>
         {!hide && <h1 className="h">QLI A-Tracker</h1>}
       </div>
-      {/* liknks */}
+      {/* Links */}
       <div className="actions">
         <div
           className="btns-c"
@@ -65,22 +56,23 @@ const Sidebar = () => {
         <div
           className="btns-c"
           onClick={() => {
-            setActive("users");
+            setActive("inventory");
             dispatch(setSelected("Inventory"));
+            navigate("/inventory");
           }}
           style={{
-            backgroundColor: active === "users" ? "rgb(155, 155, 248)" : "",
+            backgroundColor: active === "inventory" ? "rgb(155, 155, 248)" : "",
           }}
         >
           <div className="btns">
             <MdInventory2
               fontSize={30}
-              color={active === "users" ? "white" : "gray"}
+              color={active === "inventory" ? "white" : "gray"}
             />
             {!hide && (
               <span
                 style={{
-                  color: active === "dashboard" ? "white" : "gray",
+                  color: active === "inventory" ? "white" : "gray",
                   marginRight: 40,
                   fontSize: "20px",
                   color: "white",
@@ -90,59 +82,27 @@ const Sidebar = () => {
               </span>
             )}
           </div>
-          {/* <IoIosArrowForward color={active === "users" ? "white" : "gray"} /> */}
-        </div>
-        <div
-          className="btns-c"
-          style={{
-            backgroundColor: active === "companies" ? "rgb(155, 155, 248)" : "",
-          }}
-          onClick={() => {
-            setActive("companies");
-            dispatch(setSelected("Add Products"));
-          }}
-        >
-          <div className="btns">
-            <MdOutlineAddShoppingCart
-              fontSize={30}
-              color={active === "companies" ? "white" : "gray"}
-            />
-            {!hide && (
-              <span
-                style={{
-                  color: active === "dashboard" ? "white" : "gray",
-                  marginRight: 40,
-                  fontSize: "20px",
-                  color: "white",
-                }}
-              >
-                Create
-              </span>
-            )}
-          </div>
-          {/* <IoIosArrowForward
-            color={active === "companies" ? "white" : "gray"}
-          /> */}
         </div>
         <div
           className="btns-c"
           onClick={() => {
-            setActive("posts");
+            setActive("scan");
             dispatch(setSelected("Scan Product"));
+            navigate("/scan-asset");
           }}
           style={{
-            backgroundColor: active === "posts" ? "rgb(155, 155, 248)" : "",
+            backgroundColor: active === "scan" ? "rgb(155, 155, 248)" : "",
           }}
         >
           <div className="btns">
             <BsQrCodeScan
               fontSize={30}
-              color={active === "posts" ? "white" : "gray"}
+              color={active === "scan" ? "white" : "gray"}
             />
             {!hide && (
               <span
                 style={{
-                  color: active === "dashboard" ? "white" : "gray",
+                  color: active === "scan" ? "white" : "gray",
                   marginRight: 40,
                   fontSize: "20px",
                   color: "white",
@@ -152,7 +112,6 @@ const Sidebar = () => {
               </span>
             )}
           </div>
-          {/* <IoIosArrowForward color={active === "posts" ? "white" : "gray"} /> */}
         </div>
         <div
           className="btns-c"
@@ -163,6 +122,7 @@ const Sidebar = () => {
           onClick={() => {
             setActive("content");
             dispatch(setSelected("Report a bug"));
+            navigate("/report-bug");
           }}
         >
           <div
@@ -178,7 +138,7 @@ const Sidebar = () => {
             {!hide && (
               <span
                 style={{
-                  color: active === "dashboard" ? "white" : "gray",
+                  color: active === "content" ? "white" : "gray",
                   marginRight: 40,
                   fontSize: "20px",
                   color: "White",
@@ -190,7 +150,7 @@ const Sidebar = () => {
           </div>
         </div>
       </div>
-      {/* footer */}
+      {/* Footer */}
       <div
         className="footer"
         style={{ alignSelf: "flex-end", marginTop: "150px" }}
