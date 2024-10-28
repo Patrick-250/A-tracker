@@ -28,7 +28,7 @@ const Sidebar = () => {
       {/* Top logo */}
       <div className="logo">
         <span className="s-logo">logo</span>
-        {!hide && <h1 className="h">QLI INVENTORY</h1>}
+        {!hide && <h1 className="h">QLI A-Tracker</h1>}
       </div>
       {/* liknks */}
       <div className="actions">
@@ -204,7 +204,7 @@ const Sidebar = () => {
               color: "gray",
             }}
           >
-            Copyrite QLI 2024
+            Copyright QLI 2024
           </span>
         )}
       </div>

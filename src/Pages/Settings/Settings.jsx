@@ -76,11 +76,7 @@ const Settings = () => {
             <div className="input">
               <label className="label">
                 <span className="sp">Your Name</span>
-                <input
-                  type="text"
-                  placeholder="Visacci Allanz"
-                  className="in"
-                />
+                <input type="text" placeholder="patrick " className="in" />
               </label>
               <label className="label">
                 <span className="sp">User Name</span>
@@ -104,15 +100,11 @@ const Settings = () => {
             <div className="input">
               <label className="label">
                 <span className="sp">Permanent Address</span>
-                <input
-                  type="text"
-                  placeholder="Kampala, Uganda"
-                  className="in"
-                />
+                <input type="text" placeholder="Omaha, NE" className="in" />
               </label>
               <label className="label">
                 <span className="sp">Country</span>
-                <input type="text" className="in" placeholder="Uganda" />
+                <input type="text" className="in" placeholder="USA" />
               </label>
             </div>
             <button className="save">save</button>

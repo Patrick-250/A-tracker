@@ -1,6 +1,6 @@
 import React from "react";
-import Card from "../../Componets/Card/Card";
-import Category from "../../Componets/Category/Category";
+import Card from "../../Components/Card/Card";
+import Category from "../../Components/Category/Category";
 import "./Dashboard.scss";
 const Dashboard = () => {
   return (

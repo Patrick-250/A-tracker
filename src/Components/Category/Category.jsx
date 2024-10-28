@@ -25,7 +25,7 @@ const CatCard = () => {
   return (
     <div className="CatCard">
       <div className="left">
-        <span className="t">Electronics</span>
+        <span className="t">Beds</span>
         <span className="s">76</span>
       </div>
       <div className="right">

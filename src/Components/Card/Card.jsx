@@ -35,7 +35,7 @@ const Card = () => {
       <div className="card" style={{ background: "rgb(246, 246, 255)" }}>
         <div className="users">
           <div className="nums">
-            <span style={{ color: "gray" }}>Total Products</span>
+            <span style={{ color: "gray" }}>Total Assets</span>
             <span
               style={{
                 fontWeight: "bold",
