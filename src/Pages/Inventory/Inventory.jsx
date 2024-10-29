@@ -5,9 +5,10 @@ const initialAssets = [
   {
     id: 1,
     type: "Bed",
+    date: "2023-10-01",
     assetNumber: "B123",
     assetLocation: "Room 101",
-    cordIntegrity: "Good",
+    cordIntegrity: "Pass",
     groundWireResistance: "0.5 Ohms",
     groundLeakageCurrent: "0.1 mA",
     chassisTouchCurrent: "0.05 mA",
@@ -15,9 +16,10 @@ const initialAssets = [
   {
     id: 2,
     type: "Power Strip",
+    date: "2023-10-02",
     assetNumber: "PS456",
     location: "Room 202",
-    cordIntegrity: "Good",
+    cordIntegrity: "Pass",
     physicalIntegrity: "Good",
     polarity: "Correct",
     continuityOfGround: "Good",
@@ -31,9 +33,10 @@ const Inventory = ({ scannedAsset }) => {
   const [assets, setAssets] = useState(initialAssets);
   const [newAsset, setNewAsset] = useState({
     type: "",
+    date: "",
     assetNumber: "",
     assetLocation: "",
-    cordIntegrity: "",
+    cordIntegrity: "Pass",
     groundWireResistance: "",
     groundLeakageCurrent: "",
     chassisTouchCurrent: "",
@@ -82,9 +85,10 @@ const Inventory = ({ scannedAsset }) => {
   const resetNewAsset = () => {
     setNewAsset({
       type: "",
+      date: "",
       assetNumber: "",
       assetLocation: "",
-      cordIntegrity: "",
+      cordIntegrity: "Pass",
       groundWireResistance: "",
       groundLeakageCurrent: "",
       chassisTouchCurrent: "",
@@ -102,6 +106,13 @@ const Inventory = ({ scannedAsset }) => {
         return (
           <>
             <input
+              type="date"
+              name="date"
+              placeholder="Date"
+              value={asset.date}
+              onChange={handleInputChange}
+            />
+            <input
               type="text"
               name="assetNumber"
               placeholder="Asset Number"
@@ -115,13 +126,14 @@ const Inventory = ({ scannedAsset }) => {
               value={asset.assetLocation}
               onChange={handleInputChange}
             />
-            <input
-              type="text"
+            <select
               name="cordIntegrity"
-              placeholder="Cord Integrity"
               value={asset.cordIntegrity}
               onChange={handleInputChange}
-            />
+            >
+              <option value="Pass">Pass</option>
+              <option value="Fail">Fail</option>
+            </select>
             <input
               type="text"
               name="groundWireResistance"
@@ -149,9 +161,16 @@ const Inventory = ({ scannedAsset }) => {
         return (
           <>
             <input
+              type="date"
+              name="date"
+              placeholder="Date"
+              value={asset.date}
+              onChange={handleInputChange}
+            />
+            <input
               type="text"
               name="assetNumber"
-              placeholder="Asset Number"
+              placeholder="Plug Strip Asset Number"
               value={asset.assetNumber}
               onChange={handleInputChange}
             />
@@ -162,13 +181,14 @@ const Inventory = ({ scannedAsset }) => {
               value={asset.location}
               onChange={handleInputChange}
             />
-            <input
-              type="text"
+            <select
               name="cordIntegrity"
-              placeholder="Cord Integrity"
               value={asset.cordIntegrity}
               onChange={handleInputChange}
-            />
+            >
+              <option value="Pass">Pass</option>
+              <option value="Fail">Fail</option>
+            </select>
             <input
               type="text"
               name="physicalIntegrity"
@@ -258,34 +278,67 @@ const Inventory = ({ scannedAsset }) => {
           <table className="asset-table">
             <thead>
               <tr>
+                <th>Date</th>
                 <th>Asset Number</th>
                 <th>Asset Location</th>
                 <th>Cord Integrity</th>
-                <th>Ground Wire Resistance</th>
-                <th>Ground Leakage Current</th>
-                <th>Chassis Touch Current</th>
-                <th>Physical Integrity</th>
-                <th>Polarity</th>
-                <th>Continuity of Ground</th>
-                <th>Ground Tension</th>
-                <th>Ampacity</th>
+                {type === "Bed" && (
+                  <>
+                    <th>Ground Wire Resistance</th>
+                    <th>Ground Leakage Current</th>
+                    <th>Chassis Touch Current</th>
+                  </>
+                )}
+                {type === "Power Strip" && (
+                  <>
+                    <th>Physical Integrity</th>
+                    <th>Polarity</th>
+                    <th>Continuity of Ground</th>
+                    <th>Ground Tension</th>
+                    <th>Ampacity</th>
+                  </>
+                )}
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
               {categorizedAssets[type].map((asset) => (
                 <tr key={asset.id}>
+                  <td>{asset.date}</td>
                   <td>{asset.assetNumber}</td>
                   <td>{asset.assetLocation}</td>
-                  <td>{asset.cordIntegrity}</td>
-                  <td>{asset.groundWireResistance}</td>
-                  <td>{asset.groundLeakageCurrent}</td>
-                  <td>{asset.chassisTouchCurrent}</td>
-                  <td>{asset.physicalIntegrity}</td>
-                  <td>{asset.polarity}</td>
-                  <td>{asset.continuityOfGround}</td>
-                  <td>{asset.groundTension}</td>
-                  <td>{asset.ampacity}</td>
+                  <td>
+                    <select
+                      value={asset.cordIntegrity}
+                      onChange={(e) => {
+                        const updatedAssets = assets.map((a) =>
+                          a.id === asset.id
+                            ? { ...a, cordIntegrity: e.target.value }
+                            : a
+                        );
+                        setAssets(updatedAssets);
+                      }}
+                    >
+                      <option value="Pass">Pass</option>
+                      <option value="Fail">Fail</option>
+                    </select>
+                  </td>
+                  {type === "Bed" && (
+                    <>
+                      <td>{asset.groundWireResistance}</td>
+                      <td>{asset.groundLeakageCurrent}</td>
+                      <td>{asset.chassisTouchCurrent}</td>
+                    </>
+                  )}
+                  {type === "Power Strip" && (
+                    <>
+                      <td>{asset.physicalIntegrity}</td>
+                      <td>{asset.polarity}</td>
+                      <td>{asset.continuityOfGround}</td>
+                      <td>{asset.groundTension}</td>
+                      <td>{asset.ampacity}</td>
+                    </>
+                  )}
                   <td>
                     <button onClick={() => setEditingAsset(asset)}>Edit</button>
                   </td>
