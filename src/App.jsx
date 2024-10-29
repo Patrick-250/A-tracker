@@ -11,6 +11,7 @@ import Settings from "./Pages/Settings/Settings";
 import Login from "./Pages/Login/Login";
 import Inventory from "./Pages/Inventory/Inventory"; // Import Inventory component
 import ScanAsset from "./Pages/ScanAsset/ScanAsset"; // Import ScanAsset component
+import Home from "./Pages/Home/Home"; // Import Home component
 import { useSelector } from "react-redux";
 
 function App() {
@@ -37,6 +38,8 @@ function App() {
               <Layout>
                 <Routes>
                   <Route path="/" element={<Dashboard />} />
+                  <Route path="/home" element={<Home />} />{" "}
+                  {/* Add Home route */}
                   <Route path="/settings" element={<Settings />} />
                   <Route path="/login" element={<Navigate to="/" />} />
                 </Routes>

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { MdOutlineDashboard, MdInventory2 } from "react-icons/md";
 import { BsQrCodeScan } from "react-icons/bs";
 import { VscReport } from "react-icons/vsc";
+import { AiOutlineHome } from "react-icons/ai"; // Import Home icon
 import { useState } from "react";
 import { setSelected } from "../../Redux/Selected";
 import { useNavigate } from "react-router-dom";
@@ -23,6 +24,36 @@ const Sidebar = () => {
       </div>
       {/* Links */}
       <div className="actions">
+        <div
+          className="btns-c"
+          style={{
+            backgroundColor: active === "home" ? "rgb(155, 155, 248)" : "",
+          }}
+          onClick={() => {
+            setActive("home");
+            dispatch(setSelected("Home"));
+            navigate("/home");
+          }}
+        >
+          <div className="btns">
+            <AiOutlineHome
+              fontSize={30}
+              color={active === "home" ? "white" : "gray"}
+            />
+            {!hide && (
+              <span
+                style={{
+                  color: active === "home" ? "white" : "gray",
+                  marginRight: 40,
+                  fontSize: "20px",
+                  color: "white",
+                }}
+              >
+                Home
+              </span>
+            )}
+          </div>
+        </div>
         <div
           className="btns-c"
           style={{

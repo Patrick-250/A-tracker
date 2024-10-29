@@ -1,0 +1,42 @@
+/* HomePage.css */
+.home-page {
+  padding: 20px;
+  font-family: gotham;
+  background-color: #ffe6b9;
+  margin-top: 100px;
+}
+
+.safety {
+  background-color: #1e596e;
+  margin-bottom: 10px;
+  padding: 20px;
+  border-radius: 8px;
+  padding-left: opx;
+}
+
+.home-page p {
+  text-align: center;
+  margin-bottom: 20px;
+  color: white;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.feature {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.feature h2 {
+  color: #2c3e50;
+}
+
+.feature p {
+  color: #7f8c8d;
+}

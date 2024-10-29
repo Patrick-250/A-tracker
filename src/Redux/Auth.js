@@ -1,7 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  user: JSON.parse(localStorage.getItem("user")) || null, // Load user from local storage
+  user: (() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user && new Date().getTime() - user.timestamp < 24 * 60 * 60 * 1000) {
+      // Check if the user data is less than 24 hours old
+      return user.data;
+    }
+    localStorage.removeItem("user");
+    return null;
+  })(),
 };
 
 const authSlice = createSlice({
@@ -10,7 +18,13 @@ const authSlice = createSlice({
   reducers: {
     setUser: (state, action) => {
       state.user = action.payload;
-      localStorage.setItem("user", JSON.stringify(action.payload)); // Save user to local storage
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          data: action.payload,
+          timestamp: new Date().getTime(),
+        })
+      ); // Save user to local storage with timestamp
     },
     clearUser: (state) => {
       state.user = null;
