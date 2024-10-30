@@ -15,6 +15,6 @@ exports.createCategory = async (req, res) => {
     const newCategory = await Category.create(req.body);
     res.status(201).json(newCategory);
   } catch (error) {
-    res.status(400).json({ error: "Error creating category" });
+    res.status(400).json({ error: "Error creating category" })
   }
 };
