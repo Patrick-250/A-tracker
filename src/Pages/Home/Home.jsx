@@ -84,7 +84,7 @@ const Home = () => {
           <p>
             Manage portable appliances such as TVs and fridges. Track their
             locations, usage, and maintenance needs to ensure they are
-            functioning properly and efficiently.
+            functioning properly and efficiently
           </p>
         </div>
         <div className="feature">
