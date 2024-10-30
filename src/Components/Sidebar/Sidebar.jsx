@@ -28,6 +28,9 @@ const Sidebar = () => {
           className="btns-c"
           style={{
             backgroundColor: active === "home" ? "rgb(155, 155, 248)" : "",
+            display: hide ? "flex" : "",
+            alignItems: hide ? "center" : "",
+            justifyContent: hide ? "center" : "",
           }}
           onClick={() => {
             setActive("home");
@@ -58,6 +61,9 @@ const Sidebar = () => {
           className="btns-c"
           style={{
             backgroundColor: active === "dashboard" ? "rgb(155, 155, 248)" : "",
+            display: hide ? "flex" : "",
+            alignItems: hide ? "center" : "",
+            justifyContent: hide ? "center" : "",
           }}
           onClick={() => {
             setActive("dashboard");
@@ -93,6 +99,9 @@ const Sidebar = () => {
           }}
           style={{
             backgroundColor: active === "inventory" ? "rgb(155, 155, 248)" : "",
+            display: hide ? "flex" : "",
+            alignItems: hide ? "center" : "",
+            justifyContent: hide ? "center" : "",
           }}
         >
           <div className="btns">
@@ -123,6 +132,9 @@ const Sidebar = () => {
           }}
           style={{
             backgroundColor: active === "scan" ? "rgb(155, 155, 248)" : "",
+            display: hide ? "flex" : "",
+            alignItems: hide ? "center" : "",
+            justifyContent: hide ? "center" : "",
           }}
         >
           <div className="btns">
@@ -148,7 +160,10 @@ const Sidebar = () => {
           className="btns-c"
           style={{
             backgroundColor: active === "content" ? "rgb(155, 155, 248)" : "",
-            paddingRight: 0,
+            // paddingRight: 0,
+            display: hide ? "flex" : "",
+            alignItems: hide ? "center" : "",
+            justifyContent: hide ? "center" : "",
           }}
           onClick={() => {
             setActive("content");
