@@ -1,6 +1,11 @@
 .inventory {
   padding: 20px;
-  font-family: Arial, sans-serif;
+  // font-family: gotham;
+  background-color: #faf3e7;
+
+  height: 100vh;
+  overflow-y: scroll;
+  padding-top: 100px;
 
   .form {
     margin-bottom: 20px;

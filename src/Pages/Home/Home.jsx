@@ -47,6 +47,70 @@ const Home = () => {
             functioning properly and efficiently.
           </p>
         </div>
+        <div className="feature">
+          <h2>Portable Appliances </h2>
+          <p>
+            Manage portable appliances such as TVs and fridges. Track their
+            locations, usage, and maintenance needs to ensure they are
+            functioning properly and efficiently.
+          </p>
+        </div>
+        <div className="feature">
+          <h2>Portable Appliances </h2>
+          <p>
+            Manage portable appliances such as TVs and fridges. Track their
+            locations, usage, and maintenance needs to ensure they are
+            functioning properly and efficiently.
+          </p>
+        </div>
+        <div className="feature">
+          <h2>Portable Appliances </h2>
+          <p>
+            Manage portable appliances such as TVs and fridges. Track their
+            locations, usage, and maintenance needs to ensure they are
+            functioning properly and efficiently.
+          </p>
+        </div>
+        <div className="feature">
+          <h2>Portable Appliances </h2>
+          <p>
+            Manage portable appliances such as TVs and fridges. Track their
+            locations, usage, and maintenance needs to ensure they are
+            functioning properly and efficiently.
+          </p>
+        </div>
+        <div className="feature">
+          <h2>Portable Appliances </h2>
+          <p>
+            Manage portable appliances such as TVs and fridges. Track their
+            locations, usage, and maintenance needs to ensure they are
+            functioning properly and efficiently.
+          </p>
+        </div>
+        <div className="feature">
+          <h2>Portable Appliances </h2>
+          <p>
+            Manage portable appliances such as TVs and fridges. Track their
+            locations, usage, and maintenance needs to ensure they are
+            functioning properly and efficiently.
+          </p>
+        </div>
+        <div className="feature">
+          <h2>Portable Appliances </h2>
+          <p>
+            Manage portable appliances such as TVs and fridges. Track their
+            locations, usage, and maintenance needs to ensure they are
+            functioning properly and efficiently.
+          </p>
+        </div>
+        <div className="feature">
+          <h2>Portable Appliances </h2>
+          <p>
+            Manage portable appliances such as TVs and fridges. Track their
+            locations, usage, and maintenance needs to ensure they are
+            functioning properly and efficiently.
+          </p>
+        </div>
       </div>
     </div>
   );

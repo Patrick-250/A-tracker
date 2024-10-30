@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BarcodeScannerComponent from "react-qr-barcode-scanner";
-
+import "./ScanAsset.scss";
 const ScanAsset = ({ onScanComplete }) => {
   const [scannedData, setScannedData] = useState(null);
   const [assetType, setAssetType] = useState("");

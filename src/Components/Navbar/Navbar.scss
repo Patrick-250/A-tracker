@@ -2,7 +2,6 @@
   height: 50px;
   display: flex;
   align-items: center;
-  margin-top: 20px;
   justify-content: space-between;
   position: fixed;
   left: 300px;
@@ -10,14 +9,22 @@
   right: 0;
   padding: 0 10px;
   margin-right: 10px;
+  margin-top: 20px;
+  // background-color: red;
+  z-index: 99999999999;
 
   .left {
     display: flex;
     align-items: center;
     justify-content: space-between;
     width: 25%;
-    padding-left: 20px;
-
+    padding-left: 10px;
+    height: 100%;
+    background-color: white;
+    border-radius: 10px;
+    flex-direction: row;
+    padding-left: 10px;
+    padding-right: 10px;
     .head {
       font-size: 25px;
       color: rgb(85, 85, 235);
@@ -72,14 +79,30 @@
       display: flex;
       align-items: center;
       justify-content: space-evenly;
-
+      position: relative;
+      .pop {
+        background-color: white;
+        display: flex;
+        flex-direction: column;
+        padding: 8px;
+        border-radius: 6px;
+        position: absolute;
+        top: 60px;
+        left: -2px;
+        box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 50px;
+        span {
+          cursor: pointer;
+        }
+      }
       .avator {
         width: 40px;
         height: 40px;
         border-radius: 50%;
         object-fit: cover;
       }
-
+      .avator:hover + .pop {
+        border-radius: 40px;
+      }
       .name {
         font-weight: bold;
         font-size: 20px;

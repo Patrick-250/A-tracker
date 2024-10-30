@@ -13,7 +13,7 @@ const Sidebar = () => {
   const hide = isCollapsed.collapsed;
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [active, setActive] = useState("dashboard");
+  const [active, setActive] = useState("home");
 
   return (
     <div className="sidebar" style={{ width: hide ? "58px" : "280px" }}>
@@ -32,7 +32,7 @@ const Sidebar = () => {
           onClick={() => {
             setActive("home");
             dispatch(setSelected("Home"));
-            navigate("/home");
+            navigate("/");
           }}
         >
           <div className="btns">
@@ -62,7 +62,7 @@ const Sidebar = () => {
           onClick={() => {
             setActive("dashboard");
             dispatch(setSelected("Dashboard"));
-            navigate("/");
+            navigate("/dashboard");
           }}
         >
           <div className="btns">

@@ -15,44 +15,29 @@ import Home from "./Pages/Home/Home"; // Import Home component
 import { useSelector } from "react-redux";
 
 function App() {
-  const user = useSelector((state) => state.auth.user); // Get user from Redux store
+  // const user = useSelector((state) => state.auth.user); // Get usefrom Redux storer
+  const user = true;
   const [scannedAsset, setScannedAsset] = useState(null); // State for scanned asset
 
   return (
+    // this is more clean, readable and fixes bugs with sidebar not showing on some pages
+    // shall show the header and sidebar when we have a user later on
     <Router>
-      {user ? (
+      <Layout>
         <Routes>
+          <Route path="/" element={user ? <Home /> : <Login />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/settings" element={<Settings />} />
           <Route
             path="/inventory"
             element={<Inventory scannedAsset={scannedAsset} />}
-          />{" "}
-          {/* Add Inventory route */}
+          />
           <Route
             path="/scan-asset"
             element={<ScanAsset onScanComplete={setScannedAsset} />}
-          />{" "}
-          {/* Add ScanAsset route */}
-          <Route
-            path="*"
-            element={
-              <Layout>
-                <Routes>
-                  <Route path="/" element={<Dashboard />} />
-                  <Route path="/home" element={<Home />} />{" "}
-                  {/* Add Home route */}
-                  <Route path="/settings" element={<Settings />} />
-                  <Route path="/login" element={<Navigate to="/" />} />
-                </Routes>
-              </Layout>
-            }
           />
         </Routes>
-      ) : (
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="*" element={<Navigate to="/login" />} />
-        </Routes>
-      )}
+      </Layout>
     </Router>
   );
 }

@@ -7,6 +7,8 @@ const Dashboard = () => {
     <div className="dashboard">
       <Card />
       <Category />
+      <Category />
+      <Category />
     </div>
   );
 };

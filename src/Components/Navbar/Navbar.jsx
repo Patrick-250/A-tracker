@@ -11,6 +11,7 @@ import { setSelected } from "../../Redux/Selected";
 import { clearUser } from "../../Redux/auth";
 import { FaRegBell } from "react-icons/fa";
 import Badge from "@mui/material/Badge";
+import { useState, useRef } from "react";
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -19,7 +20,21 @@ const Navbar = () => {
   const user = useSelector((state) => state.auth.user || { name: "Guest" }); // Provide fallback value
   const navigate = useNavigate();
   const hide = isCollapsed.collapsed;
-
+  const [show, setShow] = useState(false);
+  const timeoutRef = useRef(null);
+  const handleMouseEnter = () => {
+    // Clear any existing timeout if the user re-enters
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    setShow(true);
+  };
+  const handleMouseLeave = () => {
+    // Set a timeout to hide tooltip after 1.5 seconds
+    timeoutRef.current = setTimeout(() => {
+      setShow(false);
+    }, 1500);
+  };
   const handleLogout = () => {
     dispatch(clearUser()); // Clear user information
     navigate("/Login"); // Navigate to login page
@@ -50,7 +65,24 @@ const Navbar = () => {
         </div>
         <hr className="hr" />
         <div className="profile">
-          <img src="/images/pic.jpg" alt="" className="avator" />
+          <IconButton
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+          >
+            <img src="/images/pic.jpg" alt="" className="avator" />
+          </IconButton>
+          {/* popup */}
+          {show && (
+            <div
+              className="pop"
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+            >
+              <span>LogOut</span>
+              <span>Settings</span>
+            </div>
+          )}
+          {/* end of poup */}
           <span className="name">{user.name}</span>{" "}
           {/* Display current user's name */}
           <IconButton>
@@ -80,14 +112,14 @@ const Navbar = () => {
               <FaRegBell />
             </Badge>
           </IconButton>
-          <Button
+          {/* <Button
             onClick={handleLogout}
             variant="contained"
             color="secondary"
             className="logout-button"
           >
             Logout
-          </Button>
+          </Button> */}
         </div>
       </div>
     </div>
