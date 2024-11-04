@@ -6,9 +6,6 @@ const Dashboard = () => {
   return (
     <div className="dashboard">
       <Card />
-      <Category />
-      <Category />
-      <Category />
     </div>
   );
 };

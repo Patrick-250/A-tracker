@@ -1,52 +1,49 @@
 .card-container {
-  width: 100%;
   display: flex;
-  flex-wrap: wrap; /* Allow cards to wrap to the next line */
-  align-items: center;
-  justify-content: flex-start; /* Align cards to the start */
-  gap: 10px; /* Reduce gap between cards */
-  padding: 10px; /* Reduce padding of the container */
-  .card {
-    display: flex;
-    width: 200px; /* Adjust width */
-    height: 110px; /* Adjust height */
-    flex-direction: column;
-    padding: 10px;
-    justify-content: space-between;
-    border-radius: 10px;
-    background-color: rgb(162, 243, 31);
-    transition: all 0.2s ease;
-    .users {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      .nums {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        height: 50px;
-        justify-content: space-between;
-      }
-      .icon {
-        background-color: rgb(192, 192, 246);
-        width: 39px;
-        height: 39px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 10px;
-      }
-    }
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 20px;
+}
 
-    .count {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-  }
-  .card:hover {
-    width: 220px; /* Adjust hover width */
-    height: 120px; /* Adjust hover height */
-    cursor: pointer;
-  }
+.card {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+.users {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nums {
+  display: flex;
+  flex-direction: column;
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+}
+
+.count {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 10px;
+  color: gray;
 }
