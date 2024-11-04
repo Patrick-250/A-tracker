@@ -7,6 +7,41 @@
   overflow-y: scroll;
   padding-top: 100px;
 
+  .add-asset {
+    background-color: #449aba;
+    margin-bottom: 20px;
+    padding: 10px 20px;
+    color: white;
+    border-radius: 5px;
+    position: relative;
+
+    &::after {
+      content: "Add a new asset";
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+
+      color: #9ddcf9;
+      padding: 5px 10px;
+      border-radius: 4px;
+      white-space: nowrap;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s, visibility 0.3s;
+    }
+
+    &:hover::after {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+
+  .add-asset:hover {
+    background-color: #218838;
+    cursor: pointer;
+  }
+
   .form {
     margin-bottom: 20px;
 
