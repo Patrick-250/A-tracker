@@ -357,20 +357,24 @@ const Inventory = ({ scannedAsset }) => {
                         <td>{asset.assetNumber}</td>
                         <td>{asset.assetLocation}</td>
                         <td>
-                          <select
-                            value={asset.cordIntegrity}
-                            onChange={(e) => {
-                              const updatedAssets = assets.map((a) =>
-                                a.id === asset.id
-                                  ? { ...a, cordIntegrity: e.target.value }
-                                  : a
-                              );
-                              setAssets(updatedAssets);
-                            }}
-                          >
-                            <option value="Pass">Pass</option>
-                            <option value="Fail">Fail</option>
-                          </select>
+                          {editingAsset && editingAsset.id === asset.id ? (
+                            <select
+                              value={asset.cordIntegrity}
+                              onChange={(e) => {
+                                const updatedAssets = assets.map((a) =>
+                                  a.id === asset.id
+                                    ? { ...a, cordIntegrity: e.target.value }
+                                    : a
+                                );
+                                setAssets(updatedAssets);
+                              }}
+                            >
+                              <option value="Pass">Pass</option>
+                              <option value="Fail">Fail</option>
+                            </select>
+                          ) : (
+                            asset.cordIntegrity
+                          )}
                         </td>
                         {type === "Bed" && (
                           <>
