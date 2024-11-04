@@ -50,6 +50,7 @@ const Inventory = ({ scannedAsset }) => {
   const [selectedType, setSelectedType] = useState("");
   const [filterType, setFilterType] = useState("");
   const [showForm, setShowForm] = useState(false);
+  const [showTestHistory, setShowTestHistory] = useState(false);
 
   useEffect(() => {
     if (scannedAsset) {
@@ -73,11 +74,13 @@ const Inventory = ({ scannedAsset }) => {
     );
     setEditingAsset(null);
     setShowForm(false);
+    setShowTestHistory(false);
   };
 
   const deleteAsset = (id) => {
     setAssets(assets.filter((asset) => asset.id !== id));
     setEditingAsset(null);
+    setShowTestHistory(false);
   };
 
   const handleInputChange = (e) => {
@@ -240,6 +243,79 @@ const Inventory = ({ scannedAsset }) => {
     }
   };
 
+  const renderTestHistory = (asset) => {
+    // Placeholder for test history data
+    const testHistory = [
+      {
+        date: "2023-09-01",
+        fields: {
+          cordIntegrity: "Pass",
+          groundWireResistance: "0.5 Ohms",
+          groundLeakageCurrent: "0.1 mA",
+          chassisTouchCurrent: "0.05 mA",
+          physicalIntegrity: "Good",
+          polarity: "Correct",
+          continuityOfGround: "Good",
+          groundTension: "0.2 Ohms",
+          ampacity: "70%",
+        },
+      },
+      {
+        date: "2023-08-01",
+        fields: {
+          cordIntegrity: "Fail",
+          groundWireResistance: "0.6 Ohms",
+          groundLeakageCurrent: "0.2 mA",
+          chassisTouchCurrent: "0.1 mA",
+          physicalIntegrity: "Poor",
+          polarity: "Incorrect",
+          continuityOfGround: "Poor",
+          groundTension: "0.3 Ohms",
+          ampacity: "80%",
+        },
+      },
+      // Add more test history data as needed
+    ];
+
+    return (
+      <div className="test-history">
+        <h3>Test History for {asset.assetNumber}</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Cord Integrity</th>
+              <th>Ground Wire Resistance</th>
+              <th>Ground Leakage Current</th>
+              <th>Chassis Touch Current</th>
+              <th>Physical Integrity</th>
+              <th>Polarity</th>
+              <th>Continuity of Ground</th>
+              <th>Ground Tension</th>
+              <th>Ampacity</th>
+            </tr>
+          </thead>
+          <tbody>
+            {testHistory.map((test, index) => (
+              <tr key={index}>
+                <td>{test.date}</td>
+                <td>{test.fields.cordIntegrity}</td>
+                <td>{test.fields.groundWireResistance}</td>
+                <td>{test.fields.groundLeakageCurrent}</td>
+                <td>{test.fields.chassisTouchCurrent}</td>
+                <td>{test.fields.physicalIntegrity}</td>
+                <td>{test.fields.polarity}</td>
+                <td>{test.fields.continuityOfGround}</td>
+                <td>{test.fields.groundTension}</td>
+                <td>{test.fields.ampacity}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
+
   const categorizedAssets = assets.reduce((acc, asset) => {
     if (!acc[asset.type]) {
       acc[asset.type] = [];
@@ -259,6 +335,7 @@ const Inventory = ({ scannedAsset }) => {
         onClick={() => {
           setShowForm(true);
           setEditingAsset(null);
+          setShowTestHistory(false);
         }}
       >
         Add Asset
@@ -289,6 +366,7 @@ const Inventory = ({ scannedAsset }) => {
                 onClick={() => {
                   setEditingAsset(null);
                   setShowForm(false);
+                  setShowTestHistory(false);
                 }}
               >
                 Cancel
@@ -299,116 +377,125 @@ const Inventory = ({ scannedAsset }) => {
           )}
         </div>
       )}
-      <div className="filter">
-        <select
-          name="filterType"
-          value={filterType}
-          onChange={(e) => setFilterType(e.target.value)}
-        >
-          <option value="">All Asset Types</option>
-          <option value="Bed">Beds</option>
-          <option value="Power Strip">Power Strips</option>
-          {/* Add more options for other asset types if needed */}
-        </select>
-      </div>
-      {Object.keys(categorizedAssets).map(
-        (type) =>
-          (filterType === "" || filterType === type) && (
-            <div key={type}>
-              <h2>
-                {type === "Bed"
-                  ? "Beds"
-                  : type === "Power Strip"
-                  ? "Power Strips"
-                  : type}
-              </h2>
-              <table className="asset-table">
-                <thead>
-                  <tr>
-                    <th>Date</th>
-                    <th>Asset Number</th>
-                    <th>Asset Location</th>
-                    <th>Cord Integrity</th>
-                    {type === "Bed" && (
-                      <>
-                        <th>Ground Wire Resistance</th>
-                        <th>Ground Leakage Current</th>
-                        <th>Chassis Touch Current</th>
-                      </>
-                    )}
-                    {type === "Power Strip" && (
-                      <>
-                        <th>Physical Integrity</th>
-                        <th>Polarity</th>
-                        <th>Continuity of Ground</th>
-                        <th>Ground Tension</th>
-                        <th>Ampacity</th>
-                      </>
-                    )}
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredAssets
-                    .filter((asset) => asset.type === type)
-                    .map((asset) => (
-                      <tr key={asset.id}>
-                        <td>{asset.date}</td>
-                        <td>{asset.assetNumber}</td>
-                        <td>{asset.assetLocation}</td>
-                        <td>
-                          {editingAsset && editingAsset.id === asset.id ? (
-                            <select
-                              value={asset.cordIntegrity}
-                              onChange={(e) => {
-                                const updatedAssets = assets.map((a) =>
-                                  a.id === asset.id
-                                    ? { ...a, cordIntegrity: e.target.value }
-                                    : a
-                                );
-                                setAssets(updatedAssets);
-                              }}
-                            >
-                              <option value="Pass">Pass</option>
-                              <option value="Fail">Fail</option>
-                            </select>
-                          ) : (
-                            asset.cordIntegrity
-                          )}
-                        </td>
+      {showTestHistory && editingAsset && renderTestHistory(editingAsset)}
+      {!editingAsset && !showForm && (
+        <>
+          <div className="filter">
+            <select
+              name="filterType"
+              value={filterType}
+              onChange={(e) => setFilterType(e.target.value)}
+            >
+              <option value="">All Asset Types</option>
+              <option value="Bed">Beds</option>
+              <option value="Power Strip">Power Strips</option>
+              {/* Add more options for other asset types if needed */}
+            </select>
+          </div>
+          {Object.keys(categorizedAssets).map(
+            (type) =>
+              (filterType === "" || filterType === type) && (
+                <div key={type}>
+                  <h2>
+                    {type === "Bed"
+                      ? "Beds"
+                      : type === "Power Strip"
+                      ? "Power Strips"
+                      : type}
+                  </h2>
+                  <table className="asset-table">
+                    <thead>
+                      <tr>
+                        <th>Date</th>
+                        <th>Asset Number</th>
+                        <th>Asset Location</th>
+                        <th>Cord Integrity</th>
                         {type === "Bed" && (
                           <>
-                            <td>{asset.groundWireResistance}</td>
-                            <td>{asset.groundLeakageCurrent}</td>
-                            <td>{asset.chassisTouchCurrent}</td>
+                            <th>Ground Wire Resistance</th>
+                            <th>Ground Leakage Current</th>
+                            <th>Chassis Touch Current</th>
                           </>
                         )}
                         {type === "Power Strip" && (
                           <>
-                            <td>{asset.physicalIntegrity}</td>
-                            <td>{asset.polarity}</td>
-                            <td>{asset.continuityOfGround}</td>
-                            <td>{asset.groundTension}</td>
-                            <td>{asset.ampacity}</td>
+                            <th>Physical Integrity</th>
+                            <th>Polarity</th>
+                            <th>Continuity of Ground</th>
+                            <th>Ground Tension</th>
+                            <th>Ampacity</th>
                           </>
                         )}
-                        <td>
-                          <button
-                            onClick={() => {
-                              setEditingAsset(asset);
-                              setShowForm(true);
-                              setSelectedType(asset.type);
-                            }}
-                          >
-                            Edit
-                          </button>
-                        </td>
+                        <th>Actions</th>
                       </tr>
-                    ))}
-                </tbody>
-              </table>
-            </div>
-          )
+                    </thead>
+                    <tbody>
+                      {filteredAssets
+                        .filter((asset) => asset.type === type)
+                        .map((asset) => (
+                          <tr key={asset.id}>
+                            <td>{asset.date}</td>
+                            <td>{asset.assetNumber}</td>
+                            <td>{asset.assetLocation}</td>
+                            <td>
+                              {editingAsset && editingAsset.id === asset.id ? (
+                                <select
+                                  value={asset.cordIntegrity}
+                                  onChange={(e) => {
+                                    const updatedAssets = assets.map((a) =>
+                                      a.id === asset.id
+                                        ? {
+                                            ...a,
+                                            cordIntegrity: e.target.value,
+                                          }
+                                        : a
+                                    );
+                                    setAssets(updatedAssets);
+                                  }}
+                                >
+                                  <option value="Pass">Pass</option>
+                                  <option value="Fail">Fail</option>
+                                </select>
+                              ) : (
+                                asset.cordIntegrity
+                              )}
+                            </td>
+                            {type === "Bed" && (
+                              <>
+                                <td>{asset.groundWireResistance}</td>
+                                <td>{asset.groundLeakageCurrent}</td>
+                                <td>{asset.chassisTouchCurrent}</td>
+                              </>
+                            )}
+                            {type === "Power Strip" && (
+                              <>
+                                <td>{asset.physicalIntegrity}</td>
+                                <td>{asset.polarity}</td>
+                                <td>{asset.continuityOfGround}</td>
+                                <td>{asset.groundTension}</td>
+                                <td>{asset.ampacity}</td>
+                              </>
+                            )}
+                            <td>
+                              <button
+                                onClick={() => {
+                                  setEditingAsset(asset);
+                                  setShowForm(true);
+                                  setSelectedType(asset.type);
+                                  setShowTestHistory(true);
+                                }}
+                              >
+                                Edit
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                    </tbody>
+                  </table>
+                </div>
+              )
+          )}
+        </>
       )}
     </div>
   );
