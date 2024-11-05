@@ -7,11 +7,11 @@ const Home = () => {
       <div className="safety">
         <p>
           QLI promotes proactive steps to establish a safe environment for
-          Residents,team members and visitors
+          Residents, team members and visitors.
         </p>
         <p>
           QLI is dedicated to ensuring the safety and maintenance of patient
-          care related electrical equipments(PCREE).
+          care related electrical equipments (PCREE).
         </p>
       </div>
 
@@ -40,71 +40,7 @@ const Home = () => {
           </p>
         </div>
         <div className="feature">
-          <h2>Portable Appliances </h2>
-          <p>
-            Manage portable appliances such as TVs and fridges. Track their
-            locations, usage, and maintenance needs to ensure they are
-            functioning properly and efficiently.
-          </p>
-        </div>
-        <div className="feature">
-          <h2>Portable Appliances </h2>
-          <p>
-            Manage portable appliances such as TVs and fridges. Track their
-            locations, usage, and maintenance needs to ensure they are
-            functioning properly and efficiently.
-          </p>
-        </div>
-        <div className="feature">
-          <h2>Portable Appliances </h2>
-          <p>
-            Manage portable appliances such as TVs and fridges. Track their
-            locations, usage, and maintenance needs to ensure they are
-            functioning properly and efficiently.
-          </p>
-        </div>
-        <div className="feature">
-          <h2>Portable Appliances </h2>
-          <p>
-            Manage portable appliances such as TVs and fridges. Track their
-            locations, usage, and maintenance needs to ensure they are
-            functioning properly and efficiently.
-          </p>
-        </div>
-        <div className="feature">
-          <h2>Portable Appliances </h2>
-          <p>
-            Manage portable appliances such as TVs and fridges. Track their
-            locations, usage, and maintenance needs to ensure they are
-            functioning properly and efficiently.
-          </p>
-        </div>
-        <div className="feature">
-          <h2>Portable Appliances </h2>
-          <p>
-            Manage portable appliances such as TVs and fridges. Track their
-            locations, usage, and maintenance needs to ensure they are
-            functioning properly and efficiently
-          </p>
-        </div>
-        <div className="feature">
-          <h2>Portable Appliances </h2>
-          <p>
-            Manage portable appliances such as TVs and fridges. Track their
-            locations, usage, and maintenance needs to ensure they are
-            functioning properly and efficiently.
-          </p>
-        </div>
-        <div className="feature">
-          <h2>Portable Appliances </h2>
-          <p>
-            Manage portable appliances such as TVs and fridges. Track their
-            locations, usage, and maintenance needs to ensure they are
-            functioning properly and efficiently.
-          </p>
-        </div>
-        <div className="feature">
-          <h2>Portable Appliances </h2>
+          <h2>Portable Appliances</h2>
           <p>
             Manage portable appliances such as TVs and fridges. Track their
             locations, usage, and maintenance needs to ensure they are

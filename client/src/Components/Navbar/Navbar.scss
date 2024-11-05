@@ -1,121 +1,119 @@
 .navbar {
-  height: 50px;
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   position: fixed;
-  left: 300px;
-  transition: all 0.3s ease;
-  right: 0;
-  padding: 0 10px;
-  margin-right: 10px;
-  margin-top: 20px;
-  // background-color: red;
-  z-index: 99999999999;
+  width: calc(100% - 80px);
+  transition: left 0.3s ease;
+
+  &.collapsed {
+    left: 80px;
+  }
+
+  &.expanded {
+    left: 300px;
+  }
 
   .left {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    width: 25%;
-    padding-left: 10px;
-    height: 100%;
-    background-color: white;
-    border-radius: 10px;
-    flex-direction: row;
-    padding-left: 10px;
-    padding-right: 10px;
+
     .head {
-      font-size: 25px;
-      color: rgb(85, 85, 235);
+      margin-left: 10px;
+      font-size: 20px;
+      font-weight: bold;
     }
   }
 
   .middle {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    background-color: white;
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 50px;
-    height: 100%;
-    width: 60%;
-    border-radius: 5px;
-    padding: 0 3px;
-
-    .hr {
-      height: 70%;
-      border: none;
-      background-color: rgb(226, 199, 199);
-      width: 2px;
-      border-radius: 6px;
-    }
+    flex-grow: 1;
+    justify-content: center;
 
     .input {
       display: flex;
       align-items: center;
-      justify-content: space-around;
-      height: 100%;
-      width: 60%;
+      background-color: #f1f1f1;
+      border-radius: 5px;
+      padding: 5px 10px;
 
       .search {
-        width: 85%;
-        height: 100%;
+        margin-left: 10px;
 
         .s {
-          width: 100%;
-          height: 100%;
-          border-color: transparent;
-        }
-
-        .s:focus {
+          border: none;
+          background: none;
           outline: none;
+          padding: 5px;
+          font-size: 16px;
         }
       }
     }
 
+    .hr {
+      margin: 0 20px;
+      border: none;
+      border-left: 1px solid #ddd;
+      height: 30px;
+    }
+
     .profile {
-      width: 50%;
-      height: 100%;
       display: flex;
       align-items: center;
-      justify-content: space-evenly;
       position: relative;
-      .pop {
-        background-color: white;
-        display: flex;
-        flex-direction: column;
-        padding: 8px;
-        border-radius: 6px;
-        position: absolute;
-        top: 60px;
-        left: -2px;
-        box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 50px;
-        span {
-          cursor: pointer;
-        }
-      }
+
       .avator {
         width: 40px;
         height: 40px;
         border-radius: 50%;
-        object-fit: cover;
-      }
-      .avator:hover + .pop {
-        border-radius: 40px;
-      }
-      .name {
-        font-weight: bold;
-        font-size: 20px;
+        cursor: pointer;
       }
 
-      .logout-button {
-        margin-left: 10px;
-        background-color: rgb(0, 157, 255);
+      .pop {
+        position: absolute;
+        top: 50px;
+        right: 10px;
+        background-color: #8b8b8b;
+        color: #fff;
+        text-decoration: underline; // Ensure this is applied
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         border-radius: 5px;
-        color: white;
-        &:hover {
-          background-color: darkblue;
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        z-index: 1000;
+        visibility: hidden;
+        opacity: 0;
+        transition: visibility 0s, opacity 0.3s ease-in-out;
+
+        span {
+          padding: 10px 15px;
+          cursor: pointer;
+          border-radius: 5px;
+          transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+
+          &:hover {
+            background-color: #0056b3;
+            color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-decoration: underline; // Ensure this is applied on hover as well
+          }
         }
+      }
+
+      .name {
+        margin-left: 10px;
+        font-size: 16px;
+        font-weight: bold;
+      }
+
+      &:hover .pop {
+        visibility: visible;
+        opacity: 1;
       }
     }
   }

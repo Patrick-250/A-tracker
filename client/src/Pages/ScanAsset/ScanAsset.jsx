@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BarcodeScannerComponent from "react-qr-barcode-scanner";
 import "./ScanAsset.scss";
+
 const ScanAsset = ({ onScanComplete }) => {
   const [scannedData, setScannedData] = useState(null);
   const [assetType, setAssetType] = useState("");
@@ -30,6 +31,11 @@ const ScanAsset = ({ onScanComplete }) => {
     if (err) {
       console.error(err);
     }
+  };
+
+  const handleTest = () => {
+    // Implement your testing logic here
+    alert("Testing asset fields...");
   };
 
   const renderFields = () => {
@@ -85,11 +91,17 @@ const ScanAsset = ({ onScanComplete }) => {
           {/* Add more options as necessary */}
         </select>
       </div>
-      <BarcodeScannerComponent width={500} height={500} onUpdate={handleScan} />
+      <BarcodeScannerComponent
+        width="100%"
+        height="auto"
+        onUpdate={handleScan}
+        facingMode="environment" // Use the back camera on mobile devices
+      />
       {scannedData && (
         <div className="scanned-data">
           <h2>Scanned Data</h2>
           {renderFields()}
+          <button onClick={handleTest}>Test</button>
         </div>
       )}
     </div>

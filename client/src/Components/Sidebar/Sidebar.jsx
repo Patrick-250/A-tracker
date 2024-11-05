@@ -1,12 +1,14 @@
+import React from "react";
 import "./Sidebar.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { MdOutlineDashboard, MdInventory2 } from "react-icons/md";
 import { BsQrCodeScan } from "react-icons/bs";
 import { VscReport } from "react-icons/vsc";
-import { AiOutlineHome } from "react-icons/ai"; // Import Home icon
+import { AiOutlineHome } from "react-icons/ai";
 import { useState } from "react";
 import { setSelected } from "../../Redux/Selected";
 import { useNavigate } from "react-router-dom";
+import logo from "../../assets/logoQLI.png"; // Adjust the path as necessary
 
 const Sidebar = () => {
   const { isCollapsed } = useSelector((state) => state);
@@ -19,7 +21,7 @@ const Sidebar = () => {
     <div className="sidebar" style={{ width: hide ? "58px" : "280px" }}>
       {/* Top logo */}
       <div className="logo">
-        <span className="s-logo">logo</span>
+        <img src={logo} alt="Logo" className="s-logo" />
         {!hide && <h1 className="h">QLI A-Tracker</h1>}
       </div>
       {/* Links */}
@@ -27,7 +29,7 @@ const Sidebar = () => {
         <div
           className="btns-c"
           style={{
-            backgroundColor: active === "home" ? "rgb(155, 155, 248)" : "",
+            backgroundColor: active === "home" ? "#449aba" : "",
             display: hide ? "flex" : "",
             alignItems: hide ? "center" : "",
             justifyContent: hide ? "center" : "",
@@ -60,7 +62,7 @@ const Sidebar = () => {
         <div
           className="btns-c"
           style={{
-            backgroundColor: active === "dashboard" ? "rgb(155, 155, 248)" : "",
+            backgroundColor: active === "dashboard" ? "#449aba" : "",
             display: hide ? "flex" : "",
             alignItems: hide ? "center" : "",
             justifyContent: hide ? "center" : "",
@@ -98,7 +100,7 @@ const Sidebar = () => {
             navigate("/inventory");
           }}
           style={{
-            backgroundColor: active === "inventory" ? "rgb(155, 155, 248)" : "",
+            backgroundColor: active === "inventory" ? "#449aba" : "",
             display: hide ? "flex" : "",
             alignItems: hide ? "center" : "",
             justifyContent: hide ? "center" : "",
@@ -131,7 +133,7 @@ const Sidebar = () => {
             navigate("/scan-asset");
           }}
           style={{
-            backgroundColor: active === "scan" ? "rgb(155, 155, 248)" : "",
+            backgroundColor: active === "scan" ? "#449aba" : "",
             display: hide ? "flex" : "",
             alignItems: hide ? "center" : "",
             justifyContent: hide ? "center" : "",
@@ -159,8 +161,7 @@ const Sidebar = () => {
         <div
           className="btns-c"
           style={{
-            backgroundColor: active === "content" ? "rgb(155, 155, 248)" : "",
-            // paddingRight: 0,
+            backgroundColor: active === "content" ? "#449aba" : "",
             display: hide ? "flex" : "",
             alignItems: hide ? "center" : "",
             justifyContent: hide ? "center" : "",

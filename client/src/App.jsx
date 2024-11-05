@@ -9,9 +9,10 @@ import Layout from "./Components/Layout/Layout";
 import Dashboard from "./Pages/Dashboard/Dashboard";
 import Settings from "./Pages/Settings/Settings";
 import Login from "./Pages/Login/Login";
-import Inventory from "./Pages/Inventory/Inventory"; // Import Inventory component
-import ScanAsset from "./Pages/ScanAsset/ScanAsset"; // Import ScanAsset component
-import Home from "./Pages/Home/Home"; // Import Home component
+import Inventory from "./Pages/Inventory/Inventory";
+import ScanAsset from "./Pages/ScanAsset/ScanAsset";
+import Home from "./Pages/Home/Home";
+import Notifications from "./Pages/Notifications/Notifications"; // Import Notifications component
 import { useSelector } from "react-redux";
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
           <Route path="/" element={user ? <Home /> : <Login />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/login" element={<Login />} />
           <Route
             path="/inventory"
             element={<Inventory scannedAsset={scannedAsset} />}
@@ -36,6 +38,8 @@ function App() {
             path="/scan-asset"
             element={<ScanAsset onScanComplete={setScannedAsset} />}
           />
+          <Route path="/notifications" element={<Notifications />} />{" "}
+          {/* Add this line */}
         </Routes>
       </Layout>
     </Router>

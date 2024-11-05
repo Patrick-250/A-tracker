@@ -2,7 +2,7 @@ import { LuSearch } from "react-icons/lu";
 import "./Navbar.scss";
 import { IoSettingsOutline } from "react-icons/io5";
 import { GiHamburgerMenu } from "react-icons/gi";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom"; // Import useLocation
 import { IconButton, Button } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { isSidebarCollapsed } from "../../Redux/collapse";
@@ -19,9 +19,13 @@ const Navbar = () => {
   const { selected } = useSelector((state) => state);
   const user = useSelector((state) => state.auth.user || { name: "Guest" }); // Provide fallback value
   const navigate = useNavigate();
+  const location = useLocation(); // Get the current path
   const hide = isCollapsed.collapsed;
   const [show, setShow] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
   const timeoutRef = useRef(null);
+
   const handleMouseEnter = () => {
     // Clear any existing timeout if the user re-enters
     if (timeoutRef.current) {
@@ -29,62 +33,104 @@ const Navbar = () => {
     }
     setShow(true);
   };
+
   const handleMouseLeave = () => {
     // Set a timeout to hide tooltip after 1.5 seconds
     timeoutRef.current = setTimeout(() => {
       setShow(false);
     }, 1500);
   };
+
   const handleLogout = () => {
+    setShowSettings(false);
+    setShowNotifications(false); // Hide notifications when logging out
     dispatch(clearUser()); // Clear user information
     navigate("/Login"); // Navigate to login page
   };
 
+  const handleSettingsClick = () => {
+    setShowSettings(true);
+    setShowNotifications(false); // Hide notifications when settings are shown
+    dispatch(setSelected("User Profile"));
+    navigate("/Settings");
+  };
+
+  const handleNotificationsClick = () => {
+    setShowNotifications(true);
+    setShowSettings(false); // Hide settings when notifications are shown
+    dispatch(setSelected("Notifications"));
+    navigate("/notifications"); // Navigate to notifications page
+  };
+
+  // Check if the current path is "/login"
+  const isLoginPage = location.pathname === "/login";
+
+  if (isLoginPage) {
+    return null; // Return null to render nothing when on the login page
+  }
+
   return (
     <div className="navbar" style={{ left: !hide ? "300px" : "80px" }}>
-      <div className="left">
-        <IconButton
-          onClick={() => {
-            dispatch(isSidebarCollapsed(!isCollapsed.collapsed));
-          }}
-        >
-          <GiHamburgerMenu />
-        </IconButton>
-        <span className="head">{selected.value}</span>
-      </div>
-      <div className="middle">
-        <div className="input">
-          <LuSearch style={{ fontSize: "25px", color: "gray" }} />
-          <div className="search">
-            <input
-              type="text"
-              className="s"
-              placeholder="search inventory..."
-            />
-          </div>
-        </div>
-        <hr className="hr" />
-        <div className="profile">
-          <IconButton
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-          >
-            <img src="/images/pic.jpg" alt="" className="avator" />
-          </IconButton>
-          {/* popup */}
-          {show && (
-            <div
-              className="pop"
-              onMouseEnter={handleMouseEnter}
-              onMouseLeave={handleMouseLeave}
+      {!showSettings && !showNotifications && (
+        <>
+          <div className="left">
+            <IconButton
+              onClick={() => {
+                dispatch(isSidebarCollapsed(!isCollapsed.collapsed));
+              }}
             >
-              <span>LogOut</span>
-              <span>Settings</span>
+              <GiHamburgerMenu />
+            </IconButton>
+            <span className="head">{selected.value}</span>
+          </div>
+          <div className="middle">
+            {location.pathname !== "/" && ( // Conditionally render the search input
+              <div className="input">
+                <LuSearch style={{ fontSize: "25px", color: "gray" }} />
+                <div className="search">
+                  <input
+                    type="text"
+                    className="s"
+                    placeholder="search inventory..."
+                  />
+                </div>
+              </div>
+            )}
+            <hr className="hr" />
+            <div className="profile">
+              <IconButton
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+              >
+                <img src="/images/pic.jpg" alt="" className="avator" />
+              </IconButton>
+              {/* popup */}
+              {show && (
+                <div
+                  className="pop"
+                  onMouseEnter={handleMouseEnter}
+                  onMouseLeave={handleMouseLeave}
+                >
+                  <span onClick={handleNotificationsClick}>
+                    <FaRegBell style={{ marginRight: "5px" }} />
+                    Notifications
+                  </span>
+                  <span onClick={handleSettingsClick}>
+                    <IoSettingsOutline style={{ marginRight: "5px" }} />
+                    Settings
+                  </span>
+                  <span onClick={handleLogout}>LogOut</span>
+                </div>
+              )}
+              {/* end of popup */}
+              <span className="name">{user.name}</span>{" "}
+              {/* Display current user's name */}
             </div>
-          )}
-          {/* end of poup */}
-          <span className="name">{user.name}</span>{" "}
-          {/* Display current user's name */}
+          </div>
+        </>
+      )}
+      {showSettings && (
+        <div className="settings-content">
           <IconButton>
             <IoSettingsOutline
               style={{ fontSize: "25px", color: "gray", cursor: "pointer" }}
@@ -93,12 +139,12 @@ const Navbar = () => {
                 navigate("/Settings");
               }}
             />
-          </IconButton>{" "}
-          <IconButton
-            onClick={() => {
-              dispatch(setSelected("Notifications"));
-            }}
-          >
+          </IconButton>
+        </div>
+      )}
+      {showNotifications && (
+        <div className="notifications-content">
+          <IconButton>
             <Badge
               badgeContent={4}
               sx={{
@@ -107,21 +153,16 @@ const Navbar = () => {
                   color: "white",
                   fontSize: "15px",
                 },
+                position: "absolute",
+                top: 0,
+                left: 0,
               }}
             >
               <FaRegBell />
             </Badge>
           </IconButton>
-          {/* <Button
-            onClick={handleLogout}
-            variant="contained"
-            color="secondary"
-            className="logout-button"
-          >
-            Logout
-          </Button> */}
         </div>
-      </div>
+      )}
     </div>
   );
 };

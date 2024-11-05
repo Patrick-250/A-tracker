@@ -2,7 +2,7 @@
   height: 100vh;
   width: 280px;
   transition: all 0.3s ease;
-  background-color: rgb(46, 46, 48);
+  background-color: #9ddcf9;
   // margin-top: 100px;
   .logo {
     display: flex;
@@ -13,10 +13,12 @@
     .h {
       font-weight: bold;
       font-size: 20px;
-      color: rgb(231, 233, 128);
+      color: #ffe6b9;
     }
     .s-logo {
-      color: rgb(155, 155, 248);
+      width: 50px; /* Adjust the width as needed */
+      height: auto; /* Maintain aspect ratio */
+      margin: 10px; /* Add some margin if needed */
     }
   }
   .footer {
@@ -50,7 +52,7 @@
       }
     }
     .btns-c:hover {
-      background-color: rgb(5, 5, 5);
+      background: color #a1a1a1;
       color: white;
     }
   }
