@@ -3,7 +3,7 @@ import "./Card.scss";
 import { IoTrendingUp } from "react-icons/io5";
 import { RiMoneyDollarCircleFill } from "react-icons/ri";
 import { TiShoppingCart } from "react-icons/ti";
-import { FaBed, FaPlug, FaStethoscope, FaTv } from "react-icons/fa"; // Import new icons
+import { FaBed, FaPlug, FaStethoscope, FaTv, FaTools } from "react-icons/fa"; // Import new icon
 
 const Card = () => {
   const [selectedCard, setSelectedCard] = useState(null);
@@ -46,6 +46,13 @@ const Card = () => {
           <div>
             here i will display the Electronic Appliances Content,fetched from
             the backend
+          </div>
+        );
+      case "Upcoming Maintenance":
+        return (
+          <div>
+            here i will display the assets with upcoming maintenance due dates,
+            fetched from the backend
           </div>
         );
       default:
@@ -189,6 +196,32 @@ const Card = () => {
               </div>
               <div className="icon">
                 <FaTv size={25} color="green" />
+              </div>
+            </div>
+          </div>
+          <div
+            className="card"
+            style={{ backgroundColor: "rgb(255, 245, 235)" }}
+            onClick={() => handleCardClick("Upcoming Maintenance")}
+          >
+            <div className="users">
+              <div className="nums">
+                <span style={{ color: "gray" }}>Upcoming Maintenance</span>
+                <span
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: 22,
+                    marginTop: 15,
+                  }}
+                >
+                  20
+                </span>
+                <span style={{ fontSize: 13, color: "gray" }}>
+                  5% of total assets
+                </span>
+              </div>
+              <div className="icon">
+                <FaTools size={25} color="orange" />
               </div>
             </div>
           </div>
