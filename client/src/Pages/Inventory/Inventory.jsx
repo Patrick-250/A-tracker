@@ -477,16 +477,30 @@ const Inventory = ({ scannedAsset }) => {
                               </>
                             )}
                             <td>
-                              <button
-                                onClick={() => {
+                              <a
+                                href="#"
+                                className="edit"
+                                onClick={(e) => {
+                                  e.preventDefault();
                                   setEditingAsset(asset);
                                   setShowForm(true);
                                   setSelectedType(asset.type);
-                                  setShowTestHistory(true);
+                                  setShowTestHistory(false);
                                 }}
                               >
                                 Edit
-                              </button>
+                              </a>
+                              <a
+                                href="#"
+                                className="tests"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  setEditingAsset(asset);
+                                  setShowTestHistory(true);
+                                }}
+                              >
+                                Tests
+                              </a>
                             </td>
                           </tr>
                         ))}
