@@ -33,7 +33,7 @@ const Settings = () => {
             color: selected === 2 ? "blue" : "gray",
           }}
         >
-          {show ? "Cancle" : "Security"}
+          {show ? "Cancel" : "Security"}
         </button>
         {show && (
           <div className="formx">
