@@ -8,8 +8,12 @@ const Card = ({
   totalMedicalEquipment,
   totalElectronicAppliances,
   totalUpcomingMaintenance,
+  totalAssets,
   onCardClick,
 }) => {
+  const calculatePercentage = (count) =>
+    ((count / totalAssets) * 100).toFixed(2);
+
   return (
     <div className="card-container">
       <div
@@ -30,7 +34,7 @@ const Card = ({
               {totalBeds}
             </span>
             <span style={{ fontSize: 13, color: "gray" }}>
-              10% of total assets
+              {calculatePercentage(totalBeds)}% of total assets
             </span>
           </div>
           <div className="icon">
@@ -56,7 +60,7 @@ const Card = ({
               {totalPowerStrips}
             </span>
             <span style={{ fontSize: 13, color: "gray" }}>
-              40% of total assets
+              {calculatePercentage(totalPowerStrips)}% of total assets
             </span>
           </div>
           <div className="icon">
@@ -82,7 +86,7 @@ const Card = ({
               {totalMedicalEquipment}
             </span>
             <span style={{ fontSize: 13, color: "gray" }}>
-              5% of total assets
+              {calculatePercentage(totalMedicalEquipment)}% of total assets
             </span>
           </div>
           <div className="icon">
@@ -108,7 +112,7 @@ const Card = ({
               {totalElectronicAppliances}
             </span>
             <span style={{ fontSize: 13, color: "gray" }}>
-              15% of total assets
+              {calculatePercentage(totalElectronicAppliances)}% of total assets
             </span>
           </div>
           <div className="icon">
@@ -134,7 +138,7 @@ const Card = ({
               {totalUpcomingMaintenance}
             </span>
             <span style={{ fontSize: 13, color: "gray" }}>
-              5% of total assets
+              {calculatePercentage(totalUpcomingMaintenance)}% of total assets
             </span>
           </div>
           <div className="icon">

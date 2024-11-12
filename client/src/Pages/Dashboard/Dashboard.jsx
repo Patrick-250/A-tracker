@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Inventory from "../../Pages/Inventory/Inventory";
 import Card from "../../Components/Card/Card";
+import "./Dashboard.scss";
 
 const Dashboard = () => {
   const [totalAssets, setTotalAssets] = useState(0);
@@ -11,6 +12,7 @@ const Dashboard = () => {
   const [totalElectronicAppliances, setTotalElectronicAppliances] = useState(0);
   const [totalUpcomingMaintenance, setTotalUpcomingMaintenance] = useState(0);
   const [filterType, setFilterType] = useState("");
+  const [assets, setAssets] = useState([]);
 
   useEffect(() => {
     fetchData();
@@ -55,6 +57,11 @@ const Dashboard = () => {
       setTotalUpcomingMaintenance(
         totalUpcomingMaintenanceResponse.data.totalUpcomingMaintenance
       );
+
+      const assetsResponse = await axios.get(
+        import.meta.env.VITE_API_BASE_URL + "/inventory"
+      );
+      setAssets(Array.isArray(assetsResponse.data) ? assetsResponse.data : []);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -65,12 +72,16 @@ const Dashboard = () => {
   };
 
   const handleCardClick = (type) => {
-    setFilterType(type === "Total Assets" ? "" : type);
+    setFilterType(type);
   };
 
   const handleBackClick = () => {
     setFilterType("");
   };
+
+  const filteredAssets = filterType
+    ? assets.filter((asset) => asset.type === filterType)
+    : assets;
 
   return (
     <div>
@@ -86,8 +97,10 @@ const Dashboard = () => {
         />
       ) : (
         <div>
-          <button onClick={handleBackClick}>Back</button>
-          <Inventory onAssetAdded={handleAssetAdded} filterType={filterType} />
+          <Inventory onAssetAdded={handleAssetAdded} assets={filteredAssets} />
+          <button className="back" onClick={handleBackClick}>
+            Back
+          </button>
         </div>
       )}
     </div>

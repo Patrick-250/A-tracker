@@ -2,13 +2,18 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./Inventory.scss";
 
-const Inventory = ({ onAssetAdded = () => {}, scannedAsset, filterType }) => {
+const Inventory = ({
+  onAssetAdded = () => {},
+  scannedAsset,
+  assets: propAssets,
+  filterType,
+}) => {
   const [assets, setAssets] = useState([]);
   const [newAsset, setNewAsset] = useState({
     type: "",
     date: "",
     assetNumber: "",
-    assetName: "", // Added assetName field
+    assetName: "",
     assetLocation: "",
     cordIntegrity: "Pass",
     groundWireResistance: "",
@@ -21,15 +26,19 @@ const Inventory = ({ onAssetAdded = () => {}, scannedAsset, filterType }) => {
     ampacity: "",
   });
   const [editingAsset, setEditingAsset] = useState(null);
-  const [selectedType, setSelectedType] = useState("");
+  const [selectedType, setSelectedType] = useState(filterType || "");
   const [showForm, setShowForm] = useState(false);
   const [showTestHistory, setShowTestHistory] = useState(false);
 
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   useEffect(() => {
-    fetchAssets();
-  }, []);
+    if (!propAssets) {
+      fetchAssets();
+    } else {
+      setAssets(propAssets);
+    }
+  }, [propAssets]);
 
   useEffect(() => {
     if (scannedAsset) {
@@ -51,7 +60,6 @@ const Inventory = ({ onAssetAdded = () => {}, scannedAsset, filterType }) => {
   };
 
   const addAsset = async () => {
-    console.log("Adding asset:", newAsset); // Debugging log
     if (newAsset.type && newAsset.date && newAsset.assetNumber) {
       try {
         const response = await axios.post(
@@ -61,7 +69,7 @@ const Inventory = ({ onAssetAdded = () => {}, scannedAsset, filterType }) => {
         setAssets([...assets, response.data]);
         resetNewAsset();
         setShowForm(false);
-        onAssetAdded(); // Call the onAssetAdded prop
+        onAssetAdded();
       } catch (error) {
         console.error("Error adding asset:", error);
       }
@@ -84,7 +92,7 @@ const Inventory = ({ onAssetAdded = () => {}, scannedAsset, filterType }) => {
       setEditingAsset(null);
       setShowForm(false);
       setShowTestHistory(false);
-      onAssetAdded(); // Call the onAssetAdded prop
+      onAssetAdded();
     } catch (error) {
       console.error("Error updating asset:", error);
     }
@@ -96,7 +104,7 @@ const Inventory = ({ onAssetAdded = () => {}, scannedAsset, filterType }) => {
       setAssets(assets.filter((asset) => asset._id !== id));
       setEditingAsset(null);
       setShowTestHistory(false);
-      onAssetAdded(); // Call the onAssetAdded prop
+      onAssetAdded();
     } catch (error) {
       console.error("Error deleting asset:", error);
     }
@@ -116,7 +124,7 @@ const Inventory = ({ onAssetAdded = () => {}, scannedAsset, filterType }) => {
       type: "",
       date: "",
       assetNumber: "",
-      assetName: "", // Reset assetName field
+      assetName: "",
       assetLocation: "",
       cordIntegrity: "Pass",
       groundWireResistance: "",
@@ -277,7 +285,7 @@ const Inventory = ({ onAssetAdded = () => {}, scannedAsset, filterType }) => {
             <input
               type="text"
               name="assetName"
-              placeholder="Asset Name" // Added assetName field
+              placeholder="Asset Name"
               value={asset.assetName}
               onChange={handleInputChange}
             />
@@ -310,7 +318,7 @@ const Inventory = ({ onAssetAdded = () => {}, scannedAsset, filterType }) => {
             <input
               type="text"
               name="assetName"
-              placeholder="Asset Name" // Added assetName field
+              placeholder="Asset Name"
               value={asset.assetName}
               onChange={handleInputChange}
             />
@@ -323,14 +331,13 @@ const Inventory = ({ onAssetAdded = () => {}, scannedAsset, filterType }) => {
             />
           </>
         );
-      // Add more cases for other asset types if needed
+
       default:
         return null;
     }
   };
 
   const renderTestHistory = (asset) => {
-    // Placeholder for test history data
     const testHistory = [
       {
         date: "2023-09-01",
@@ -360,7 +367,6 @@ const Inventory = ({ onAssetAdded = () => {}, scannedAsset, filterType }) => {
           ampacity: "80%",
         },
       },
-      // Add more test history data as needed
     ];
 
     return (
@@ -402,24 +408,23 @@ const Inventory = ({ onAssetAdded = () => {}, scannedAsset, filterType }) => {
     );
   };
 
-  const categorizedAssets = Array.isArray(assets)
-    ? assets.reduce((acc, asset) => {
-        if (!acc[asset.type]) {
-          acc[asset.type] = [];
-        }
-        acc[asset.type].push(asset);
-        return acc;
-      }, {})
-    : {};
+  const filteredAssets = selectedType
+    ? assets.filter((asset) => asset.type === selectedType)
+    : assets;
 
-  const filteredAssets = Array.isArray(assets)
-    ? selectedType
-      ? assets.filter((asset) => asset.type === selectedType)
-      : assets
-    : [];
+  const groupedAssets = filteredAssets.reduce((acc, asset) => {
+    if (!acc[asset.type]) {
+      acc[asset.type] = [];
+    }
+    acc[asset.type].push(asset);
+    return acc;
+  }, {});
 
   return (
     <div className="inventory">
+      <div className="filter">
+        <label htmlFor="assetType">Select Asset Type:</label>
+      </div>
       <button
         className="add-asset"
         onClick={() => {
@@ -441,11 +446,10 @@ const Inventory = ({ onAssetAdded = () => {}, scannedAsset, filterType }) => {
             }}
           >
             <option value="">Select Asset Type</option>
-            <option value="Bed">Beds</option>
-            <option value="Power Strip">Power Strips</option>
+            <option value="Bed">Bed</option>
+            <option value="Power Strip">Power Strip</option>
             <option value="Medical Equipment">Medical Equipment</option>
             <option value="Electronic Appliances">Electronic Appliances</option>
-            {/* Add more options for other asset types if needed */}
           </select>
           {selectedType && renderFormFields(editingAsset || newAsset)}
           {editingAsset ? (
@@ -472,121 +476,122 @@ const Inventory = ({ onAssetAdded = () => {}, scannedAsset, filterType }) => {
       {showTestHistory && editingAsset && renderTestHistory(editingAsset)}
       {!editingAsset && !showForm && (
         <>
-          {Object.keys(categorizedAssets).map(
-            (type) =>
-              (selectedType === "" || selectedType === type) && (
-                <div key={type}>
-                  <h2>
-                    {type === "Bed"
-                      ? "Beds"
-                      : type === "Power Strip"
-                      ? "Power Strips"
-                      : type}
-                  </h2>
-                  <table className="asset-table">
-                    <thead>
-                      <tr>
-                        <th>Date</th>
-                        <th>Asset Number</th>
-                        <th>Asset Location</th>
-                        <th>Cord Integrity</th>
-                        {type === "Bed" && (
-                          <>
-                            <th>Ground Wire Resistance</th>
-                            <th>Ground Leakage Current</th>
-                            <th>Chassis Touch Current</th>
-                          </>
+          {Object.keys(groupedAssets).map((type) => (
+            <div key={type}>
+              <h2>
+                {type === "Bed"
+                  ? "Beds"
+                  : type === "Power Strip"
+                  ? "Power Strips"
+                  : type === "Medical Equipment"
+                  ? "Medical Equipment"
+                  : type === "Electronic Appliances"
+                  ? "Electronic Appliances"
+                  : type}
+              </h2>
+              <table className="asset-table">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Asset Number</th>
+                    <th>Asset Location</th>
+                    <th>Cord Integrity</th>
+                    {type === "Bed" && (
+                      <>
+                        <th>Ground Wire Resistance</th>
+                        <th>Ground Leakage Current</th>
+                        <th>Chassis Touch Current</th>
+                      </>
+                    )}
+                    {type === "Power Strip" && (
+                      <>
+                        <th>Physical Integrity</th>
+                        <th>Polarity</th>
+                        <th>Continuity of Ground</th>
+                        <th>Ground Tension</th>
+                        <th>Ampacity</th>
+                      </>
+                    )}
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {groupedAssets[type].map((asset) => (
+                    <tr key={asset._id}>
+                      <td>{asset.date}</td>
+                      <td>{asset.assetNumber}</td>
+                      <td>{asset.assetLocation}</td>
+                      <td>
+                        {editingAsset && editingAsset._id === asset._id ? (
+                          <select
+                            value={asset.cordIntegrity}
+                            onChange={(e) => {
+                              const updatedAssets = assets.map((a) =>
+                                a._id === asset._id
+                                  ? {
+                                      ...a,
+                                      cordIntegrity: e.target.value,
+                                    }
+                                  : a
+                              );
+                              setAssets(updatedAssets);
+                            }}
+                          >
+                            <option value="Pass">Pass</option>
+                            <option value="Fail">Fail</option>
+                          </select>
+                        ) : (
+                          asset.cordIntegrity
                         )}
-                        {type === "Power Strip" && (
-                          <>
-                            <th>Physical Integrity</th>
-                            <th>Polarity</th>
-                            <th>Continuity of Ground</th>
-                            <th>Ground Tension</th>
-                            <th>Ampacity</th>
-                          </>
-                        )}
-                        <th>Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {filteredAssets.map((asset) => (
-                        <tr key={asset._id}>
-                          <td>{asset.date}</td>
-                          <td>{asset.assetNumber}</td>
-                          <td>{asset.assetLocation}</td>
-                          <td>
-                            {editingAsset && editingAsset._id === asset._id ? (
-                              <select
-                                value={asset.cordIntegrity}
-                                onChange={(e) => {
-                                  const updatedAssets = assets.map((a) =>
-                                    a._id === asset._id
-                                      ? {
-                                          ...a,
-                                          cordIntegrity: e.target.value,
-                                        }
-                                      : a
-                                  );
-                                  setAssets(updatedAssets);
-                                }}
-                              >
-                                <option value="Pass">Pass</option>
-                                <option value="Fail">Fail</option>
-                              </select>
-                            ) : (
-                              asset.cordIntegrity
-                            )}
-                          </td>
-                          {type === "Bed" && (
-                            <>
-                              <td>{asset.groundWireResistance}</td>
-                              <td>{asset.groundLeakageCurrent}</td>
-                              <td>{asset.chassisTouchCurrent}</td>
-                            </>
-                          )}
-                          {type === "Power Strip" && (
-                            <>
-                              <td>{asset.physicalIntegrity}</td>
-                              <td>{asset.polarity}</td>
-                              <td>{asset.continuityOfGround}</td>
-                              <td>{asset.groundTension}</td>
-                              <td>{asset.ampacity}</td>
-                            </>
-                          )}
-                          <td>
-                            <a
-                              href="#"
-                              className="edit"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                setEditingAsset(asset);
-                                setShowForm(true);
-                                setSelectedType(asset.type);
-                                setShowTestHistory(false);
-                              }}
-                            >
-                              Edit
-                            </a>
-                            <a
-                              href="#"
-                              className="tests"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                setEditingAsset(asset);
-                                setShowTestHistory(true);
-                              }}
-                            >
-                              Tests
-                            </a>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              )
-          )}
+                      </td>
+                      {type === "Bed" && (
+                        <>
+                          <td>{asset.groundWireResistance}</td>
+                          <td>{asset.groundLeakageCurrent}</td>
+                          <td>{asset.chassisTouchCurrent}</td>
+                        </>
+                      )}
+                      {type === "Power Strip" && (
+                        <>
+                          <td>{asset.physicalIntegrity}</td>
+                          <td>{asset.polarity}</td>
+                          <td>{asset.continuityOfGround}</td>
+                          <td>{asset.groundTension}</td>
+                          <td>{asset.ampacity}</td>
+                        </>
+                      )}
+                      <td>
+                        <a
+                          href="#"
+                          className="edit"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setEditingAsset(asset);
+                            setShowForm(true);
+                            setSelectedType(asset.type);
+                            setShowTestHistory(false);
+                          }}
+                        >
+                          Edit
+                        </a>
+                        <a
+                          href="#"
+                          className="tests"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setEditingAsset(asset);
+                            setShowTestHistory(true);
+                          }}
+                        >
+                          Tests
+                        </a>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ))}
         </>
       )}
     </div>

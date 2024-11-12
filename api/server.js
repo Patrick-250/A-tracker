@@ -2,7 +2,8 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const inventoryRoutes = require("./routes/inventoryRoutes");
-const dashboardRoutes = require("./routes/dashboardRoutes"); // Import the new routes
+const dashboardRoutes = require("./routes/dashboardRoutes");
+const loginRoutes = require("./routes/loginRoutes"); // Import the login routes
 
 const app = express();
 
@@ -27,6 +28,9 @@ app.use("/api/inventory", inventoryRoutes);
 
 // Use the dashboard routes
 app.use("/api/dashboard", dashboardRoutes);
+
+// Use the login routes
+app.use("/api", loginRoutes); // Add this line
 
 // Define a route for the root URL
 app.get("/", (req, res) => {

@@ -1,36 +1,30 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { setUser } from "../../Redux/auth";
-import "./Login.scss";
+import axios from "axios";
 
-const dummyUser = {
-  username: "testuser",
-  password: "password123",
-  name: "Test User",
-};
+import "./Login.scss";
 
 const Login = () => {
   const [formData, setFormData] = useState({ username: "", password: "" });
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const handleChange = (e) => {
     const { id, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [id]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (
-      formData.username === dummyUser.username &&
-      formData.password === dummyUser.password
-    ) {
-      alert("Login successful!");
-      dispatch(setUser(dummyUser));
-      navigate("/"); // Navigate to the Dashboard page
-    } else {
-      alert("Invalid username or password.");
+
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}/login`,
+        formData
+      );
+      alert(response.data.message);
+      navigate("/");
+    } catch (error) {
+      alert(error.response.data.message);
     }
   };
 

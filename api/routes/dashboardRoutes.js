@@ -50,7 +50,7 @@ router.get("/total-medical-equipment", async (req, res) => {
 router.get("/total-electronic-appliances", async (req, res) => {
   try {
     const totalElectronicAppliances = await Asset.countDocuments({
-      type: "Electronic Appliance",
+      type: "Electronic Appliances",
     });
     res.json({ totalElectronicAppliances });
   } catch (error) {
