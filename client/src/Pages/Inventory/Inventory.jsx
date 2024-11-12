@@ -8,6 +8,7 @@ const Inventory = ({ onAssetAdded = () => {}, scannedAsset, filterType }) => {
     type: "",
     date: "",
     assetNumber: "",
+    assetName: "", // Added assetName field
     assetLocation: "",
     cordIntegrity: "Pass",
     groundWireResistance: "",
@@ -50,6 +51,7 @@ const Inventory = ({ onAssetAdded = () => {}, scannedAsset, filterType }) => {
   };
 
   const addAsset = async () => {
+    console.log("Adding asset:", newAsset); // Debugging log
     if (newAsset.type && newAsset.date && newAsset.assetNumber) {
       try {
         const response = await axios.post(
@@ -114,6 +116,7 @@ const Inventory = ({ onAssetAdded = () => {}, scannedAsset, filterType }) => {
       type: "",
       date: "",
       assetNumber: "",
+      assetName: "", // Reset assetName field
       assetLocation: "",
       cordIntegrity: "Pass",
       groundWireResistance: "",
@@ -254,6 +257,72 @@ const Inventory = ({ onAssetAdded = () => {}, scannedAsset, filterType }) => {
             />
           </>
         );
+      case "Medical Equipment":
+        return (
+          <>
+            <input
+              type="date"
+              name="date"
+              placeholder="Date"
+              value={asset.date}
+              onChange={handleInputChange}
+            />
+            <input
+              type="text"
+              name="assetNumber"
+              placeholder="Asset Number"
+              value={asset.assetNumber}
+              onChange={handleInputChange}
+            />
+            <input
+              type="text"
+              name="assetName"
+              placeholder="Asset Name" // Added assetName field
+              value={asset.assetName}
+              onChange={handleInputChange}
+            />
+            <input
+              type="text"
+              name="assetLocation"
+              placeholder="Asset Location"
+              value={asset.assetLocation}
+              onChange={handleInputChange}
+            />
+          </>
+        );
+      case "Electronic Appliances":
+        return (
+          <>
+            <input
+              type="date"
+              name="date"
+              placeholder="Date"
+              value={asset.date}
+              onChange={handleInputChange}
+            />
+            <input
+              type="text"
+              name="assetNumber"
+              placeholder="Asset Number"
+              value={asset.assetNumber}
+              onChange={handleInputChange}
+            />
+            <input
+              type="text"
+              name="assetName"
+              placeholder="Asset Name" // Added assetName field
+              value={asset.assetName}
+              onChange={handleInputChange}
+            />
+            <input
+              type="text"
+              name="assetLocation"
+              placeholder="Asset Location"
+              value={asset.assetLocation}
+              onChange={handleInputChange}
+            />
+          </>
+        );
       // Add more cases for other asset types if needed
       default:
         return null;
@@ -374,6 +443,8 @@ const Inventory = ({ onAssetAdded = () => {}, scannedAsset, filterType }) => {
             <option value="">Select Asset Type</option>
             <option value="Bed">Beds</option>
             <option value="Power Strip">Power Strips</option>
+            <option value="Medical Equipment">Medical Equipment</option>
+            <option value="Electronic Appliances">Electronic Appliances</option>
             {/* Add more options for other asset types if needed */}
           </select>
           {selectedType && renderFormFields(editingAsset || newAsset)}

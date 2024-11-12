@@ -15,7 +15,7 @@ mongoose.connect("mongodb://localhost:27017/yourDatabaseName", {
 // Use the CORS middleware
 app.use(
   cors({
-    origin: "http://localhost:5173", // Replace with your frontend's origin
+    origin: ["http://localhost:5174", "http://atrackerd.qli.local"],
   })
 );
 

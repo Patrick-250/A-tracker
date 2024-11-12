@@ -1,12 +1,8 @@
 import React from "react";
 import "./Card.scss";
-import { IoTrendingUp } from "react-icons/io5";
-import { RiMoneyDollarCircleFill } from "react-icons/ri";
-import { TiShoppingCart } from "react-icons/ti";
 import { FaBed, FaPlug, FaStethoscope, FaTv, FaTools } from "react-icons/fa";
 
 const Card = ({
-  totalAssets,
   totalBeds,
   totalPowerStrips,
   totalMedicalEquipment,
@@ -16,37 +12,6 @@ const Card = ({
 }) => {
   return (
     <div className="card-container">
-      <div
-        className="card"
-        style={{ background: "rgb(246, 246, 255)" }}
-        onClick={() => onCardClick("")}
-      >
-        <div className="users">
-          <div className="nums">
-            <span style={{ color: "gray" }}>Total Assets</span>
-            <span
-              style={{
-                fontWeight: "bold",
-                fontSize: 22,
-                marginTop: 15,
-              }}
-            >
-              {totalAssets}
-            </span>
-          </div>
-          <div
-            className="icon"
-            style={{ backgroundColor: "rgb(235, 241, 199)" }}
-          >
-            <TiShoppingCart size={25} color="rgb(81, 230, 36)" />
-          </div>
-        </div>
-        <div className="count">
-          <IoTrendingUp size={17} />
-          <span style={{ fontSize: 13 }}>30%</span>
-          <span style={{ fontSize: 13 }}>in the last 4 days</span>
-        </div>
-      </div>
       <div
         className="card"
         style={{ backgroundColor: "rgb(255, 235, 235)" }}
