@@ -34,7 +34,7 @@ const ReportBug = () => {
     <div className="report-bug">
       <h1>Report a Bug</h1>
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="report-bug-form">
         <div className="form-group">
           <label htmlFor="description">
             <strong>Description *</strong>

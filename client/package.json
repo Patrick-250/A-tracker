@@ -17,6 +17,7 @@
     "@mui/x-data-grid": "^7.22.0",
     "@reduxjs/toolkit": "^2.3.0",
     "axios": "^1.7.7",
+    "dotenv": "^16.4.5",
     "jsbarcode": "^3.11.6",
     "lucide-react": "^0.453.0",
     "numeral": "^2.0.6",

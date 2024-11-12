@@ -1,36 +1,9 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import "./Inventory.scss";
 
-const initialAssets = [
-  {
-    id: 1,
-    type: "Bed",
-    date: "2023-10-01",
-    assetNumber: "B123",
-    assetLocation: "Room 101",
-    cordIntegrity: "Pass",
-    groundWireResistance: "0.5 Ohms",
-    groundLeakageCurrent: "0.1 mA",
-    chassisTouchCurrent: "0.05 mA",
-  },
-  {
-    id: 2,
-    type: "Power Strip",
-    date: "2023-10-02",
-    assetNumber: "PS456",
-    location: "Room 202",
-    cordIntegrity: "Pass",
-    physicalIntegrity: "Good",
-    polarity: "Correct",
-    continuityOfGround: "Good",
-    groundTension: "0.2 Ohms",
-    ampacity: "70%",
-  },
-  // Add more sample data as needed
-];
-
-const Inventory = ({ scannedAsset }) => {
-  const [assets, setAssets] = useState(initialAssets);
+const Inventory = ({ onAssetAdded = () => {}, scannedAsset, filterType }) => {
+  const [assets, setAssets] = useState([]);
   const [newAsset, setNewAsset] = useState({
     type: "",
     date: "",
@@ -48,9 +21,14 @@ const Inventory = ({ scannedAsset }) => {
   });
   const [editingAsset, setEditingAsset] = useState(null);
   const [selectedType, setSelectedType] = useState("");
-  const [filterType, setFilterType] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [showTestHistory, setShowTestHistory] = useState(false);
+
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+  useEffect(() => {
+    fetchAssets();
+  }, []);
 
   useEffect(() => {
     if (scannedAsset) {
@@ -58,29 +36,68 @@ const Inventory = ({ scannedAsset }) => {
     }
   }, [scannedAsset]);
 
-  const addAsset = () => {
-    if (newAsset.type && newAsset.date && newAsset.assetNumber) {
-      setAssets([...assets, { ...newAsset, id: Date.now() }]);
-      resetNewAsset();
-      setShowForm(false);
+  useEffect(() => {
+    setSelectedType(filterType);
+  }, [filterType]);
+
+  const fetchAssets = async () => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/inventory`);
+      setAssets(Array.isArray(response.data) ? response.data : []);
+    } catch (error) {
+      console.error("Error fetching assets:", error);
     }
   };
 
-  const updateAsset = () => {
-    setAssets(
-      assets.map((asset) =>
-        asset.id === editingAsset.id ? { ...editingAsset } : asset
-      )
-    );
-    setEditingAsset(null);
-    setShowForm(false);
-    setShowTestHistory(false);
+  const addAsset = async () => {
+    if (newAsset.type && newAsset.date && newAsset.assetNumber) {
+      try {
+        const response = await axios.post(
+          `${API_BASE_URL}/inventory`,
+          newAsset
+        );
+        setAssets([...assets, response.data]);
+        resetNewAsset();
+        setShowForm(false);
+        onAssetAdded(); // Call the onAssetAdded prop
+      } catch (error) {
+        console.error("Error adding asset:", error);
+      }
+    } else {
+      console.error("Please fill in all required fields.");
+    }
   };
 
-  const deleteAsset = (id) => {
-    setAssets(assets.filter((asset) => asset.id !== id));
-    setEditingAsset(null);
-    setShowTestHistory(false);
+  const updateAsset = async () => {
+    try {
+      const response = await axios.put(
+        `${API_BASE_URL}/inventory/${editingAsset._id}`,
+        editingAsset
+      );
+      setAssets(
+        assets.map((asset) =>
+          asset._id === editingAsset._id ? response.data : asset
+        )
+      );
+      setEditingAsset(null);
+      setShowForm(false);
+      setShowTestHistory(false);
+      onAssetAdded(); // Call the onAssetAdded prop
+    } catch (error) {
+      console.error("Error updating asset:", error);
+    }
+  };
+
+  const deleteAsset = async (id) => {
+    try {
+      await axios.delete(`${API_BASE_URL}/inventory/${id}`);
+      setAssets(assets.filter((asset) => asset._id !== id));
+      setEditingAsset(null);
+      setShowTestHistory(false);
+      onAssetAdded(); // Call the onAssetAdded prop
+    } catch (error) {
+      console.error("Error deleting asset:", error);
+    }
   };
 
   const handleInputChange = (e) => {
@@ -187,9 +204,9 @@ const Inventory = ({ scannedAsset }) => {
             />
             <input
               type="text"
-              name="location"
+              name="assetLocation"
               placeholder="Location"
-              value={asset.location}
+              value={asset.assetLocation}
               onChange={handleInputChange}
             />
             <select
@@ -316,17 +333,21 @@ const Inventory = ({ scannedAsset }) => {
     );
   };
 
-  const categorizedAssets = assets.reduce((acc, asset) => {
-    if (!acc[asset.type]) {
-      acc[asset.type] = [];
-    }
-    acc[asset.type].push(asset);
-    return acc;
-  }, {});
+  const categorizedAssets = Array.isArray(assets)
+    ? assets.reduce((acc, asset) => {
+        if (!acc[asset.type]) {
+          acc[asset.type] = [];
+        }
+        acc[asset.type].push(asset);
+        return acc;
+      }, {})
+    : {};
 
-  const filteredAssets = filterType
-    ? assets.filter((asset) => asset.type === filterType)
-    : assets;
+  const filteredAssets = Array.isArray(assets)
+    ? selectedType
+      ? assets.filter((asset) => asset.type === selectedType)
+      : assets
+    : [];
 
   return (
     <div className="inventory">
@@ -359,7 +380,7 @@ const Inventory = ({ scannedAsset }) => {
           {editingAsset ? (
             <>
               <button onClick={updateAsset}>Update Asset</button>
-              <button onClick={() => deleteAsset(editingAsset.id)}>
+              <button onClick={() => deleteAsset(editingAsset._id)}>
                 Delete Asset
               </button>
               <button
@@ -380,21 +401,9 @@ const Inventory = ({ scannedAsset }) => {
       {showTestHistory && editingAsset && renderTestHistory(editingAsset)}
       {!editingAsset && !showForm && (
         <>
-          <div className="filter">
-            <select
-              name="filterType"
-              value={filterType}
-              onChange={(e) => setFilterType(e.target.value)}
-            >
-              <option value="">All Asset Types</option>
-              <option value="Bed">Beds</option>
-              <option value="Power Strip">Power Strips</option>
-              {/* Add more options for other asset types if needed */}
-            </select>
-          </div>
           {Object.keys(categorizedAssets).map(
             (type) =>
-              (filterType === "" || filterType === type) && (
+              (selectedType === "" || selectedType === type) && (
                 <div key={type}>
                   <h2>
                     {type === "Bed"
@@ -430,80 +439,78 @@ const Inventory = ({ scannedAsset }) => {
                       </tr>
                     </thead>
                     <tbody>
-                      {filteredAssets
-                        .filter((asset) => asset.type === type)
-                        .map((asset) => (
-                          <tr key={asset.id}>
-                            <td>{asset.date}</td>
-                            <td>{asset.assetNumber}</td>
-                            <td>{asset.assetLocation}</td>
-                            <td>
-                              {editingAsset && editingAsset.id === asset.id ? (
-                                <select
-                                  value={asset.cordIntegrity}
-                                  onChange={(e) => {
-                                    const updatedAssets = assets.map((a) =>
-                                      a.id === asset.id
-                                        ? {
-                                            ...a,
-                                            cordIntegrity: e.target.value,
-                                          }
-                                        : a
-                                    );
-                                    setAssets(updatedAssets);
-                                  }}
-                                >
-                                  <option value="Pass">Pass</option>
-                                  <option value="Fail">Fail</option>
-                                </select>
-                              ) : (
-                                asset.cordIntegrity
-                              )}
-                            </td>
-                            {type === "Bed" && (
-                              <>
-                                <td>{asset.groundWireResistance}</td>
-                                <td>{asset.groundLeakageCurrent}</td>
-                                <td>{asset.chassisTouchCurrent}</td>
-                              </>
-                            )}
-                            {type === "Power Strip" && (
-                              <>
-                                <td>{asset.physicalIntegrity}</td>
-                                <td>{asset.polarity}</td>
-                                <td>{asset.continuityOfGround}</td>
-                                <td>{asset.groundTension}</td>
-                                <td>{asset.ampacity}</td>
-                              </>
-                            )}
-                            <td>
-                              <a
-                                href="#"
-                                className="edit"
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  setEditingAsset(asset);
-                                  setShowForm(true);
-                                  setSelectedType(asset.type);
-                                  setShowTestHistory(false);
+                      {filteredAssets.map((asset) => (
+                        <tr key={asset._id}>
+                          <td>{asset.date}</td>
+                          <td>{asset.assetNumber}</td>
+                          <td>{asset.assetLocation}</td>
+                          <td>
+                            {editingAsset && editingAsset._id === asset._id ? (
+                              <select
+                                value={asset.cordIntegrity}
+                                onChange={(e) => {
+                                  const updatedAssets = assets.map((a) =>
+                                    a._id === asset._id
+                                      ? {
+                                          ...a,
+                                          cordIntegrity: e.target.value,
+                                        }
+                                      : a
+                                  );
+                                  setAssets(updatedAssets);
                                 }}
                               >
-                                Edit
-                              </a>
-                              <a
-                                href="#"
-                                className="tests"
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  setEditingAsset(asset);
-                                  setShowTestHistory(true);
-                                }}
-                              >
-                                Tests
-                              </a>
-                            </td>
-                          </tr>
-                        ))}
+                                <option value="Pass">Pass</option>
+                                <option value="Fail">Fail</option>
+                              </select>
+                            ) : (
+                              asset.cordIntegrity
+                            )}
+                          </td>
+                          {type === "Bed" && (
+                            <>
+                              <td>{asset.groundWireResistance}</td>
+                              <td>{asset.groundLeakageCurrent}</td>
+                              <td>{asset.chassisTouchCurrent}</td>
+                            </>
+                          )}
+                          {type === "Power Strip" && (
+                            <>
+                              <td>{asset.physicalIntegrity}</td>
+                              <td>{asset.polarity}</td>
+                              <td>{asset.continuityOfGround}</td>
+                              <td>{asset.groundTension}</td>
+                              <td>{asset.ampacity}</td>
+                            </>
+                          )}
+                          <td>
+                            <a
+                              href="#"
+                              className="edit"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                setEditingAsset(asset);
+                                setShowForm(true);
+                                setSelectedType(asset.type);
+                                setShowTestHistory(false);
+                              }}
+                            >
+                              Edit
+                            </a>
+                            <a
+                              href="#"
+                              className="tests"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                setEditingAsset(asset);
+                                setShowTestHistory(true);
+                              }}
+                            >
+                              Tests
+                            </a>
+                          </td>
+                        </tr>
+                      ))}
                     </tbody>
                   </table>
                 </div>

@@ -1,17 +1,38 @@
-// server.js
 const express = require("express");
-const dotenv = require("dotenv");
-const connectDB = require("./dataBase/db");
-
-dotenv.config();
-connectDB();
+const mongoose = require("mongoose");
+const cors = require("cors");
+const inventoryRoutes = require("./routes/inventoryRoutes");
+const dashboardRoutes = require("./routes/dashboardRoutes"); // Import the new routes
 
 const app = express();
+
+// Connect to MongoDB
+mongoose.connect("mongodb://localhost:27017/yourDatabaseName", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+// Use the CORS middleware
+app.use(
+  cors({
+    origin: "http://localhost:5173", // Replace with your frontend's origin
+  })
+);
+
+// To parse JSON bodies
 app.use(express.json());
 
-app.use("/api/auth", require("./routes/authRoutes"));
-app.use("/api/categories", require("./routes/categoryRoutes"));
-app.use("/api/items", require("./routes/itemRoutes"));
+// Use the inventory routes
+app.use("/api/inventory", inventoryRoutes);
 
+// Use the dashboard routes
+app.use("/api/dashboard", dashboardRoutes);
+
+// Define a route for the root URL
+app.get("/", (req, res) => {
+  res.send("Welcome to the Inventory API");
+});
+
+// Start the server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
