@@ -1,14 +1,19 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const dotenv = require("dotenv");
+const morgan = require("morgan"); // Import morgan
 const inventoryRoutes = require("./routes/inventoryRoutes");
 const dashboardRoutes = require("./routes/dashboardRoutes");
-const loginRoutes = require("./routes/loginRoutes"); // Import the login routes
+const userRoutes = require("./routes/userRoutes");
+const authRoutes = require("./routes/authRoutes"); // Import auth routes
+
+dotenv.config(); // Load environment variables
 
 const app = express();
 
 // Connect to MongoDB
-mongoose.connect("mongodb://localhost:27017/yourDatabaseName", {
+mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
@@ -16,9 +21,19 @@ mongoose.connect("mongodb://localhost:27017/yourDatabaseName", {
 // Use the CORS middleware
 app.use(
   cors({
-    origin: ["http://localhost:5174", "http://atrackerd.qli.local"],
+    origin: [
+      "http://localhost:5174",
+      "http://atrackerd.qli.local",
+      "http://localhost:3002",
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
   })
 );
+
+// Use morgan for logging
+app.use(morgan("combined"));
 
 // To parse JSON bodies
 app.use(express.json());
@@ -29,8 +44,11 @@ app.use("/api/inventory", inventoryRoutes);
 // Use the dashboard routes
 app.use("/api/dashboard", dashboardRoutes);
 
-// Use the login routes
-app.use("/api", loginRoutes); // Add this line
+// Use the user routes
+app.use("/api/users", userRoutes);
+
+// Use the auth routes
+app.use("/api/auth", authRoutes); // Add this line
 
 // Define a route for the root URL
 app.get("/", (req, res) => {

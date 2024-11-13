@@ -1,16 +1,13 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-import "./Login.scss";
-
-const Login = () => {
+const AddUser = () => {
   const [formData, setFormData] = useState({ username: "", password: "" });
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    const { id, value } = e.target;
-    setFormData((prevData) => ({ ...prevData, [id]: value }));
+    setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
@@ -18,25 +15,24 @@ const Login = () => {
 
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}/auth/login`,
+        `${import.meta.env.VITE_API_BASE_URL}/users/register`,
         formData
       );
       alert(response.data.message);
-      navigate("/");
+      navigate("/admin");
     } catch (error) {
       alert(error.response.data.message);
     }
   };
 
   return (
-    <div className="login-container">
-      <form className="login-form" onSubmit={handleSubmit}>
-        <h1>Login</h1>
+    <div>
+      <h1>Add User</h1>
+      <form onSubmit={handleSubmit}>
         <label htmlFor="username">Username:</label>
         <input
           type="text"
           id="username"
-          placeholder="username"
           value={formData.username}
           onChange={handleChange}
           required
@@ -45,15 +41,14 @@ const Login = () => {
         <input
           type="password"
           id="password"
-          placeholder="password"
           value={formData.password}
           onChange={handleChange}
           required
         />
-        <button type="submit">Sign In</button>
+        <button type="submit">Add User</button>
       </form>
     </div>
   );
 };
 
-export default Login;
+export default AddUser;
