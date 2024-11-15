@@ -7,6 +7,7 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   position: fixed;
   width: 70%;
+  height: 10%;
 
   transition: left 0.3s ease;
   margin-top: 0px;
@@ -100,8 +101,7 @@
           transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
 
           &:hover {
-            background-color: #0056b3;
-            color: #fff;
+            background-color: #9ddcf9;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             text-decoration: underline; // Ensure this is applied on hover as well
           }

@@ -76,21 +76,17 @@ const Settings = () => {
             <div className="input">
               <label className="label">
                 <span className="sp">Your Name</span>
-                <input type="text" placeholder="patrick " className="in" />
+                <input type="text" placeholder="Patrick " className="in" />
               </label>
               <label className="label">
                 <span className="sp">User Name</span>
-                <input type="text" className="in" placeholder="visacci" />
+                <input type="text" className="in" placeholder="TestUser" />
               </label>
             </div>
             <div className="input">
               <label className="label">
                 <span className="sp">Email</span>
-                <input
-                  type="text"
-                  placeholder="visacciallanz@gmail.com"
-                  className="in"
-                />
+                <input type="text" placeholder="E-mail" className="in" />
               </label>
               <label className="label">
                 <span className="sp">Password</span>

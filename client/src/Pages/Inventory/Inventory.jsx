@@ -428,6 +428,11 @@ const Inventory = ({
           setShowForm(true);
           setEditingAsset(null);
           setShowTestHistory(false);
+          setSelectedType("Bed");
+          setNewAsset({
+            ...newAsset,
+            type: "Bed",
+          });
         }}
       >
         Add Asset
