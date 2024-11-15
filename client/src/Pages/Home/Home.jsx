@@ -1,7 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import "./Home.scss";
 
 const Home = () => {
+  const user = useSelector((state) => state.auth.user);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!user) {
+      navigate("/login");
+    }
+  }, [user, navigate]);
+
+  if (!user) {
+    return null; // Return null to render nothing if the user is not logged in
+  }
+
   return (
     <div className="home-page">
       <div className="safety">

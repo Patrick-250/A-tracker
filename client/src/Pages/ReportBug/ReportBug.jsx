@@ -27,6 +27,7 @@ const ReportBug = () => {
     setTimeout(() => {
       setSuccessMessage("");
       navigate("/");
+      window.location.reload();
     }, 3000); // Clear the message and navigate after 3 seconds
   };
 

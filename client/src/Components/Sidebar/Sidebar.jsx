@@ -3,11 +3,10 @@ import "./Sidebar.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { MdOutlineDashboard, MdInventory2 } from "react-icons/md";
 import { BsQrCodeScan } from "react-icons/bs";
-import { VscReport } from "react-icons/vsc";
 import { AiOutlineHome } from "react-icons/ai";
 import { useState } from "react";
 import { setSelected } from "../../Redux/Selected";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import logo from "../../assets/logoQLI.png"; // Adjust the path as necessary
 
 const Sidebar = () => {
@@ -15,7 +14,15 @@ const Sidebar = () => {
   const hide = isCollapsed.collapsed;
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation(); // Get the current path
   const [active, setActive] = useState("home");
+
+  // Check if the current path is "/login"
+  const isLoginPage = location.pathname === "/login";
+
+  if (isLoginPage) {
+    return null; // Return null to render nothing when on the login page
+  }
 
   return (
     <div className="sidebar" style={{ width: hide ? "58px" : "280px" }}>
@@ -154,44 +161,6 @@ const Sidebar = () => {
                 }}
               >
                 Scan
-              </span>
-            )}
-          </div>
-        </div>
-        <div
-          className="btns-c"
-          style={{
-            backgroundColor: active === "content" ? "#449aba" : "",
-            display: hide ? "flex" : "",
-            alignItems: hide ? "center" : "",
-            justifyContent: hide ? "center" : "",
-          }}
-          onClick={() => {
-            setActive("content");
-            dispatch(setSelected("Report a bug"));
-            navigate("/report-bug");
-          }}
-        >
-          <div
-            className="btns"
-            style={{
-              width: "100%",
-            }}
-          >
-            <VscReport
-              fontSize={30}
-              color={active === "content" ? "white" : "gray"}
-            />
-            {!hide && (
-              <span
-                style={{
-                  color: active === "content" ? "white" : "gray",
-                  marginRight: 40,
-                  fontSize: "20px",
-                  color: "White",
-                }}
-              >
-                Report a bug
               </span>
             )}
           </div>
