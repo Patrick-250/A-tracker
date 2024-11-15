@@ -119,7 +119,9 @@ const Navbar = () => {
                     <IoSettingsOutline style={{ marginRight: "5px" }} />
                     Settings
                   </span>
-                  <span onClick={handleLogout}>Sign out</span>
+                  <span onClick={handleLogout}>
+                    {user.name === "Guest" ? "Sign in" : "Sign out"}
+                  </span>
                 </div>
               )}
               {/* end of popup */}
