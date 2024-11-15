@@ -2,7 +2,7 @@ import { LuSearch } from "react-icons/lu";
 import "./Navbar.scss";
 import { IoSettingsOutline } from "react-icons/io5";
 import { GiHamburgerMenu } from "react-icons/gi";
-import { Link, useLocation } from "react-router-dom"; // Import useLocation
+import { Link, useLocation } from "react-router-dom";
 import { IconButton, Button } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { isSidebarCollapsed } from "../../Redux/collapse";
@@ -11,7 +11,7 @@ import { setSelected } from "../../Redux/Selected";
 import { clearUser } from "../../Redux/auth";
 import { FaRegBell } from "react-icons/fa";
 import Badge from "@mui/material/Badge";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -25,6 +25,10 @@ const Navbar = () => {
   const [showSettings, setShowSettings] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const timeoutRef = useRef(null);
+
+  useEffect(() => {
+    // console.log("User state updated:", user);
+  }, [user]);
 
   const handleMouseEnter = () => {
     // Clear any existing timeout if the user re-enters
@@ -42,9 +46,11 @@ const Navbar = () => {
   };
 
   const handleLogout = () => {
+    // console.log("Logging out...");
     setShowSettings(false);
     setShowNotifications(false); // Hide notifications when logging out
     dispatch(clearUser()); // Clear user information
+    // console.log("User after logout:", user); // Log user state after logout
     navigate("/Login"); // Navigate to login page
   };
 

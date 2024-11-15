@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-
+import { useDispatch } from "react-redux";
+import { setUser } from "../../Redux/auth"; // Import setUser action
 import "./Login.scss";
 
 const Login = () => {
   const [formData, setFormData] = useState({ username: "", password: "" });
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -22,6 +24,8 @@ const Login = () => {
         formData
       );
       alert(response.data.message);
+      // console.log("Dispatching setUser with:", { name: formData.username });
+      dispatch(setUser({ name: formData.username })); // Dispatch setUser action after login
       navigate("/");
     } catch (error) {
       alert(error.response.data.message);
