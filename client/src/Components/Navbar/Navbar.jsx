@@ -90,25 +90,26 @@ const Navbar = () => {
             <span className="head">{selected.value}</span>
           </div>
           <div className="middle">
-            {location.pathname !== "/" && ( // Conditionally render the search input
-              <div className="input">
-                <LuSearch style={{ fontSize: "25px", color: "gray" }} />
-                <div className="search">
-                  <input
-                    type="text"
-                    className="s"
-                    placeholder="search inventory..."
-                  />
+            {location.pathname !== "/" &&
+              location.pathname !== "/dashboard" && ( // Conditionally render the search input
+                <div className="input">
+                  <LuSearch style={{ fontSize: "25px", color: "gray" }} />
+                  <div className="search">
+                    <input
+                      type="text"
+                      className="s"
+                      placeholder="search inventory..."
+                    />
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
             <hr className="hr" />
             <div className="profile">
               <IconButton
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
               >
-                <img src="/images/pic.jpg" alt="" className="avator" />
+                <img src="/images/avator.jpeg" alt="" className="avator" />
               </IconButton>
               {/* popup */}
               {show && (

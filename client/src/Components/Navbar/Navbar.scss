@@ -3,12 +3,13 @@
   justify-content: space-between;
   align-items: center;
   padding: 10px 20px;
-  background-color: #fff;
+  background-color: #1e596e;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   position: fixed;
-  width: calc(100% - 80px);
+  width: 70%;
+
   transition: left 0.3s ease;
-  margin-top: 40px;
+  margin-top: 0px;
   display: flex;
 
   &.collapsed {

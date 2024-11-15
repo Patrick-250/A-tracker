@@ -422,9 +422,6 @@ const Inventory = ({
 
   return (
     <div className="inventory">
-      <div className="filter">
-        <label htmlFor="assetType">Select Asset Type:</label>
-      </div>
       <button
         className="add-asset"
         onClick={() => {
