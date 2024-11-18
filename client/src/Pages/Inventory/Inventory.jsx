@@ -81,12 +81,12 @@ const Inventory = ({
   const updateAsset = async () => {
     try {
       const response = await axios.put(
-        `${API_BASE_URL}/inventory/${editingAsset._id}`,
+        `${API_BASE_URL}/inventory/${editingAsset.id}`,
         editingAsset
       );
       setAssets(
         assets.map((asset) =>
-          asset._id === editingAsset._id ? response.data : asset
+          asset.id === editingAsset.id ? response.data : asset
         )
       );
       setEditingAsset(null);
@@ -101,7 +101,7 @@ const Inventory = ({
   const deleteAsset = async (id) => {
     try {
       await axios.delete(`${API_BASE_URL}/inventory/${id}`);
-      setAssets(assets.filter((asset) => asset._id !== id));
+      setAssets(assets.filter((asset) => asset.id !== id));
       setEditingAsset(null);
       setShowTestHistory(false);
       onAssetAdded();
@@ -457,7 +457,7 @@ const Inventory = ({
           {editingAsset ? (
             <>
               <button onClick={updateAsset}>Update Asset</button>
-              <button onClick={() => deleteAsset(editingAsset._id)}>
+              <button onClick={() => deleteAsset(editingAsset.id)}>
                 Delete Asset
               </button>
               <button
@@ -519,17 +519,17 @@ const Inventory = ({
                 </thead>
                 <tbody>
                   {groupedAssets[type].map((asset) => (
-                    <tr key={asset._id}>
+                    <tr key={asset.id}>
                       <td>{asset.date}</td>
                       <td>{asset.assetNumber}</td>
                       <td>{asset.assetLocation}</td>
                       <td>
-                        {editingAsset && editingAsset._id === asset._id ? (
+                        {editingAsset && editingAsset.id === asset.id ? (
                           <select
                             value={asset.cordIntegrity}
                             onChange={(e) => {
                               const updatedAssets = assets.map((a) =>
-                                a._id === asset._id
+                                a.id === asset.id
                                   ? {
                                       ...a,
                                       cordIntegrity: e.target.value,

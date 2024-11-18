@@ -1,22 +1,16 @@
 const express = require("express");
-const mongoose = require("mongoose");
 const cors = require("cors");
 const dotenv = require("dotenv");
-const morgan = require("morgan"); // Import morgan
+const morgan = require("morgan");
+const sequelize = require("./dataBase/db");
 const inventoryRoutes = require("./routes/inventoryRoutes");
 const dashboardRoutes = require("./routes/dashboardRoutes");
 const userRoutes = require("./routes/userRoutes");
-const authRoutes = require("./routes/authRoutes"); // Import auth routes
+const authRoutes = require("./routes/authRoutes");
 
 dotenv.config(); // Load environment variables
 
 const app = express();
-
-// Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
 
 // Use the CORS middleware
 app.use(
@@ -48,13 +42,24 @@ app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/users", userRoutes);
 
 // Use the auth routes
-app.use("/api/auth", authRoutes); // Add this line
+app.use("/api/auth", authRoutes);
 
 // Define a route for the root URL
 app.get("/", (req, res) => {
   res.send("Welcome to the Inventory API");
 });
 
-// Start the server
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// Sync Sequelize models and start the server
+sequelize
+  .sync()
+  .then(() => {
+    console.log("connected to assets Database & tables created! ");
+    const PORT = process.env.PORT || 5000;
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  })
+  .catch((error) => {
+    console.error("Unable to create tables, shutting down...", error);
+    process.exit(1);
+  });

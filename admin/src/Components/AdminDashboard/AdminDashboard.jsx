@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
@@ -26,8 +26,8 @@ const AdminDashboard = () => {
       <Link to="/add-user">Add User</Link>
       <ul>
         {users.map((user) => (
-          <li key={user._id}>
-            {user.username} <Link to={`/delete-user/${user._id}`}>Delete</Link>
+          <li key={user.id}>
+            {user.username} <Link to={`/delete-user/${user.id}`}>Delete</Link>
           </li>
         ))}
       </ul>

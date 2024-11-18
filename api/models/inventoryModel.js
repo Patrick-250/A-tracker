@@ -1,20 +1,52 @@
-// models/inventoryModel.js
-const mongoose = require("mongoose");
+// models/Inventory.js
+const { DataTypes } = require("sequelize");
+const sequelize = require("../dataBase/db");
 
-const inventorySchema = new mongoose.Schema({
-  type: { type: String, required: true },
-  date: { type: Date, required: true },
-  assetNumber: { type: String, required: true },
-  assetLocation: { type: String, required: true },
-  cordIntegrity: { type: String, required: true },
-  groundWireResistance: { type: String },
-  groundLeakageCurrent: { type: String },
-  chassisTouchCurrent: { type: String },
-  physicalIntegrity: { type: String },
-  polarity: { type: String },
-  continuityOfGround: { type: String },
-  groundTension: { type: String },
-  ampacity: { type: String },
+const Inventory = sequelize.define("Inventory", {
+  type: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  date: {
+    type: DataTypes.DATE,
+    allowNull: false,
+  },
+  assetNumber: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  assetLocation: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  cordIntegrity: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  groundWireResistance: {
+    type: DataTypes.STRING,
+  },
+  groundLeakageCurrent: {
+    type: DataTypes.STRING,
+  },
+  chassisTouchCurrent: {
+    type: DataTypes.STRING,
+  },
+  physicalIntegrity: {
+    type: DataTypes.STRING,
+  },
+  polarity: {
+    type: DataTypes.STRING,
+  },
+  continuityOfGround: {
+    type: DataTypes.STRING,
+  },
+  groundTension: {
+    type: DataTypes.STRING,
+  },
+  ampacity: {
+    type: DataTypes.STRING,
+  },
 });
 
-module.exports = mongoose.model("Inventory", inventorySchema);
+module.exports = Inventory;
