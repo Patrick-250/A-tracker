@@ -29,7 +29,7 @@ const Sidebar = () => {
       {/* Top logo */}
       <div className="logo">
         <img src={logo} alt="Logo" className="s-logo" />
-        {!hide && <h1 className="h">QLI A-Tracker</h1>}
+        {!hide && <h1 className="h">A-Tracker</h1>}
       </div>
       {/* Links */}
       <div className="actions">

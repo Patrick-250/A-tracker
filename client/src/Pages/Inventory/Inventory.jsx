@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./Inventory.scss";
+import TestHistory from "../TestHistory/TestHistory";
+import Test from "../Test/Test";
+import AssetForm from "../AssetForm/AssetForm"; // Import the AssetForm component
 
 const Inventory = ({
   onAssetAdded = () => {},
@@ -21,14 +24,15 @@ const Inventory = ({
     chassisTouchCurrent: "",
     physicalIntegrity: "",
     polarity: "",
-    continuityOfGround: "",
-    groundTension: "",
+    continuityOfGroundTension: "", // New field
     ampacity: "",
   });
   const [editingAsset, setEditingAsset] = useState(null);
   const [selectedType, setSelectedType] = useState(filterType || "");
   const [showForm, setShowForm] = useState(false);
   const [showTestHistory, setShowTestHistory] = useState(false);
+  const [showTests, setShowTests] = useState(false);
+  const [manageAssetId, setManageAssetId] = useState(null);
 
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -52,7 +56,9 @@ const Inventory = ({
 
   const fetchAssets = async () => {
     try {
+      console.log("Fetching assets...");
       const response = await axios.get(`${API_BASE_URL}/inventory`);
+      console.log("Assets fetched:", response.data);
       setAssets(Array.isArray(response.data) ? response.data : []);
     } catch (error) {
       console.error("Error fetching assets:", error);
@@ -62,10 +68,12 @@ const Inventory = ({
   const addAsset = async () => {
     if (newAsset.type && newAsset.date && newAsset.assetNumber) {
       try {
+        console.log("Adding asset:", newAsset);
         const response = await axios.post(
           `${API_BASE_URL}/inventory`,
           newAsset
         );
+        console.log("Asset added:", response.data);
         setAssets([...assets, response.data]);
         resetNewAsset();
         setShowForm(false);
@@ -80,10 +88,12 @@ const Inventory = ({
 
   const updateAsset = async () => {
     try {
+      console.log("Updating asset:", editingAsset);
       const response = await axios.put(
         `${API_BASE_URL}/inventory/${editingAsset.id}`,
         editingAsset
       );
+      console.log("Asset updated:", response.data);
       setAssets(
         assets.map((asset) =>
           asset.id === editingAsset.id ? response.data : asset
@@ -92,6 +102,7 @@ const Inventory = ({
       setEditingAsset(null);
       setShowForm(false);
       setShowTestHistory(false);
+      setShowTests(false);
       onAssetAdded();
     } catch (error) {
       console.error("Error updating asset:", error);
@@ -100,10 +111,13 @@ const Inventory = ({
 
   const deleteAsset = async (id) => {
     try {
+      console.log("Deleting asset with id:", id);
       await axios.delete(`${API_BASE_URL}/inventory/${id}`);
+      console.log("Asset deleted");
       setAssets(assets.filter((asset) => asset.id !== id));
       setEditingAsset(null);
       setShowTestHistory(false);
+      setShowTests(false);
       onAssetAdded();
     } catch (error) {
       console.error("Error deleting asset:", error);
@@ -112,6 +126,10 @@ const Inventory = ({
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    console.log(`Input change - ${name}: ${value}`);
+    if (name === "type") {
+      setSelectedType(value);
+    }
     if (editingAsset) {
       setEditingAsset({ ...editingAsset, [name]: value });
     } else {
@@ -120,6 +138,7 @@ const Inventory = ({
   };
 
   const resetNewAsset = () => {
+    console.log("Resetting new asset form");
     setNewAsset({
       type: "",
       date: "",
@@ -132,280 +151,48 @@ const Inventory = ({
       chassisTouchCurrent: "",
       physicalIntegrity: "",
       polarity: "",
-      continuityOfGround: "",
-      groundTension: "",
+      continuityOfGroundTension: "", // New field
       ampacity: "",
     });
     setSelectedType("");
   };
 
-  const renderFormFields = (asset) => {
-    switch (asset.type) {
-      case "Bed":
-        return (
-          <>
-            <input
-              type="date"
-              name="date"
-              placeholder="Date"
-              value={asset.date}
-              onChange={handleInputChange}
-            />
-            <input
-              type="text"
-              name="assetNumber"
-              placeholder="Asset Number"
-              value={asset.assetNumber}
-              onChange={handleInputChange}
-            />
-            <input
-              type="text"
-              name="assetLocation"
-              placeholder="Asset Location"
-              value={asset.assetLocation}
-              onChange={handleInputChange}
-            />
-            <select
-              name="cordIntegrity"
-              value={asset.cordIntegrity}
-              onChange={handleInputChange}
-            >
-              <option value="Pass">Pass</option>
-              <option value="Fail">Fail</option>
-            </select>
-            <input
-              type="text"
-              name="groundWireResistance"
-              placeholder="Ground Wire Resistance"
-              value={asset.groundWireResistance}
-              onChange={handleInputChange}
-            />
-            <input
-              type="text"
-              name="groundLeakageCurrent"
-              placeholder="Ground Leakage Current"
-              value={asset.groundLeakageCurrent}
-              onChange={handleInputChange}
-            />
-            <input
-              type="text"
-              name="chassisTouchCurrent"
-              placeholder="Chassis Touch Current"
-              value={asset.chassisTouchCurrent}
-              onChange={handleInputChange}
-            />
-          </>
-        );
-      case "Power Strip":
-        return (
-          <>
-            <input
-              type="date"
-              name="date"
-              placeholder="Date"
-              value={asset.date}
-              onChange={handleInputChange}
-            />
-            <input
-              type="text"
-              name="assetNumber"
-              placeholder="Plug Strip Asset Number"
-              value={asset.assetNumber}
-              onChange={handleInputChange}
-            />
-            <input
-              type="text"
-              name="assetLocation"
-              placeholder="Location"
-              value={asset.assetLocation}
-              onChange={handleInputChange}
-            />
-            <select
-              name="cordIntegrity"
-              value={asset.cordIntegrity}
-              onChange={handleInputChange}
-            >
-              <option value="Pass">Pass</option>
-              <option value="Fail">Fail</option>
-            </select>
-            <input
-              type="text"
-              name="physicalIntegrity"
-              placeholder="Physical Integrity"
-              value={asset.physicalIntegrity}
-              onChange={handleInputChange}
-            />
-            <input
-              type="text"
-              name="polarity"
-              placeholder="Polarity"
-              value={asset.polarity}
-              onChange={handleInputChange}
-            />
-            <input
-              type="text"
-              name="continuityOfGround"
-              placeholder="Continuity of Ground"
-              value={asset.continuityOfGround}
-              onChange={handleInputChange}
-            />
-            <input
-              type="text"
-              name="groundTension"
-              placeholder="Ground Tension"
-              value={asset.groundTension}
-              onChange={handleInputChange}
-            />
-            <input
-              type="text"
-              name="ampacity"
-              placeholder="Ampacity"
-              value={asset.ampacity}
-              onChange={handleInputChange}
-            />
-          </>
-        );
-      case "Medical Equipment":
-        return (
-          <>
-            <input
-              type="date"
-              name="date"
-              placeholder="Date"
-              value={asset.date}
-              onChange={handleInputChange}
-            />
-            <input
-              type="text"
-              name="assetNumber"
-              placeholder="Asset Number"
-              value={asset.assetNumber}
-              onChange={handleInputChange}
-            />
-            <input
-              type="text"
-              name="assetName"
-              placeholder="Asset Name"
-              value={asset.assetName}
-              onChange={handleInputChange}
-            />
-            <input
-              type="text"
-              name="assetLocation"
-              placeholder="Asset Location"
-              value={asset.assetLocation}
-              onChange={handleInputChange}
-            />
-          </>
-        );
-      case "Electronic Appliances":
-        return (
-          <>
-            <input
-              type="date"
-              name="date"
-              placeholder="Date"
-              value={asset.date}
-              onChange={handleInputChange}
-            />
-            <input
-              type="text"
-              name="assetNumber"
-              placeholder="Asset Number"
-              value={asset.assetNumber}
-              onChange={handleInputChange}
-            />
-            <input
-              type="text"
-              name="assetName"
-              placeholder="Asset Name"
-              value={asset.assetName}
-              onChange={handleInputChange}
-            />
-            <input
-              type="text"
-              name="assetLocation"
-              placeholder="Asset Location"
-              value={asset.assetLocation}
-              onChange={handleInputChange}
-            />
-          </>
-        );
+  const saveTestResults = async (assetId, testResults) => {
+    try {
+      console.log("Saving test results for asset:", assetId, testResults);
+      const response = await axios.put(
+        `${API_BASE_URL}/inventory/${assetId}/test-history`,
+        { testResults }
+      );
+      console.log("Test results saved:", response.data);
 
-      default:
-        return null;
+      // Update the asset's fields with the test results
+      setAssets((prevAssets) => {
+        const updatedAssets = prevAssets.map((asset) => {
+          if (asset.id === assetId) {
+            console.log(
+              "Updating asset fields with test results:",
+              testResults
+            );
+            return {
+              ...asset,
+              ...testResults,
+            };
+          }
+          return asset;
+        });
+        console.log("Updated assets:", updatedAssets);
+        return updatedAssets;
+      });
+
+      // Update the asset in the database
+      await axios.put(`${API_BASE_URL}/inventory/${assetId}`, {
+        ...testResults,
+      });
+      console.log("Asset fields updated in the database");
+    } catch (error) {
+      console.error("Error saving test results:", error);
     }
-  };
-
-  const renderTestHistory = (asset) => {
-    const testHistory = [
-      {
-        date: "2023-09-01",
-        fields: {
-          cordIntegrity: "Pass",
-          groundWireResistance: "0.5 Ohms",
-          groundLeakageCurrent: "0.1 mA",
-          chassisTouchCurrent: "0.05 mA",
-          physicalIntegrity: "Good",
-          polarity: "Correct",
-          continuityOfGround: "Good",
-          groundTension: "0.2 Ohms",
-          ampacity: "70%",
-        },
-      },
-      {
-        date: "2023-08-01",
-        fields: {
-          cordIntegrity: "Fail",
-          groundWireResistance: "0.6 Ohms",
-          groundLeakageCurrent: "0.2 mA",
-          chassisTouchCurrent: "0.1 mA",
-          physicalIntegrity: "Poor",
-          polarity: "Incorrect",
-          continuityOfGround: "Poor",
-          groundTension: "0.3 Ohms",
-          ampacity: "80%",
-        },
-      },
-    ];
-
-    return (
-      <div className="test-history">
-        <h3>Test History for {asset.assetNumber}</h3>
-        <table>
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Cord Integrity</th>
-              <th>Ground Wire Resistance</th>
-              <th>Ground Leakage Current</th>
-              <th>Chassis Touch Current</th>
-              <th>Physical Integrity</th>
-              <th>Polarity</th>
-              <th>Continuity of Ground</th>
-              <th>Ground Tension</th>
-              <th>Ampacity</th>
-            </tr>
-          </thead>
-          <tbody>
-            {testHistory.map((test, index) => (
-              <tr key={index}>
-                <td>{test.date}</td>
-                <td>{test.fields.cordIntegrity}</td>
-                <td>{test.fields.groundWireResistance}</td>
-                <td>{test.fields.groundLeakageCurrent}</td>
-                <td>{test.fields.chassisTouchCurrent}</td>
-                <td>{test.fields.physicalIntegrity}</td>
-                <td>{test.fields.polarity}</td>
-                <td>{test.fields.continuityOfGround}</td>
-                <td>{test.fields.groundTension}</td>
-                <td>{test.fields.ampacity}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    );
   };
 
   const filteredAssets = selectedType
@@ -425,9 +212,11 @@ const Inventory = ({
       <button
         className="add-asset"
         onClick={() => {
+          console.log("Add Asset button clicked");
           setShowForm(true);
           setEditingAsset(null);
           setShowTestHistory(false);
+          setShowTests(false);
           setSelectedType("Bed");
           setNewAsset({
             ...newAsset,
@@ -438,44 +227,38 @@ const Inventory = ({
         Add Asset
       </button>
       {showForm && (
-        <div className="form">
-          <select
-            name="type"
-            value={selectedType}
-            onChange={(e) => {
-              setSelectedType(e.target.value);
-              handleInputChange(e);
-            }}
-          >
-            <option value="">Select Asset Type</option>
-            <option value="Bed">Bed</option>
-            <option value="Power Strip">Power Strip</option>
-            <option value="Medical Equipment">Medical Equipment</option>
-            <option value="Electronic Appliances">Electronic Appliances</option>
-          </select>
-          {selectedType && renderFormFields(editingAsset || newAsset)}
-          {editingAsset ? (
-            <>
-              <button onClick={updateAsset}>Update Asset</button>
-              <button onClick={() => deleteAsset(editingAsset.id)}>
-                Delete Asset
-              </button>
-              <button
-                onClick={() => {
-                  setEditingAsset(null);
-                  setShowForm(false);
-                  setShowTestHistory(false);
-                }}
-              >
-                Cancel
-              </button>
-            </>
-          ) : (
-            selectedType && <button onClick={addAsset}>Add Asset</button>
-          )}
-        </div>
+        <AssetForm
+          asset={editingAsset || newAsset}
+          selectedType={selectedType}
+          handleInputChange={handleInputChange}
+          handleSubmit={editingAsset ? updateAsset : addAsset}
+          handleCancel={() => {
+            console.log("Cancel button clicked");
+            setEditingAsset(null);
+            setShowForm(false);
+            setShowTestHistory(false);
+            setShowTests(false);
+          }}
+          isEditing={!!editingAsset}
+          handleDelete={() => deleteAsset(editingAsset.id)}
+        />
       )}
-      {showTestHistory && editingAsset && renderTestHistory(editingAsset)}
+      {showTestHistory && editingAsset && (
+        <TestHistory assetId={editingAsset.id} assetType={editingAsset.type} />
+      )}
+      {showTests && editingAsset && (
+        <Test
+          asset={editingAsset}
+          saveTestResults={saveTestResults}
+          handleCancel={() => {
+            console.log("Cancel button clicked");
+            setEditingAsset(null);
+            setShowForm(false);
+            setShowTestHistory(false);
+            setShowTests(false);
+          }}
+        />
+      )}
       {!editingAsset && !showForm && (
         <>
           {Object.keys(groupedAssets).map((type) => (
@@ -497,7 +280,10 @@ const Inventory = ({
                     <th>Date</th>
                     <th>Asset Number</th>
                     <th>Asset Location</th>
-                    <th>Cord Integrity</th>
+                    {type !== "Medical Equipment" &&
+                      type !== "Electronic Appliances" && (
+                        <th>Cord Integrity</th>
+                      )}
                     {type === "Bed" && (
                       <>
                         <th>Ground Wire Resistance</th>
@@ -509,8 +295,7 @@ const Inventory = ({
                       <>
                         <th>Physical Integrity</th>
                         <th>Polarity</th>
-                        <th>Continuity of Ground</th>
-                        <th>Ground Tension</th>
+                        <th>Continuity of Ground Tension</th> {/* New field */}
                         <th>Ampacity</th>
                       </>
                     )}
@@ -523,29 +308,32 @@ const Inventory = ({
                       <td>{asset.date}</td>
                       <td>{asset.assetNumber}</td>
                       <td>{asset.assetLocation}</td>
-                      <td>
-                        {editingAsset && editingAsset.id === asset.id ? (
-                          <select
-                            value={asset.cordIntegrity}
-                            onChange={(e) => {
-                              const updatedAssets = assets.map((a) =>
-                                a.id === asset.id
-                                  ? {
-                                      ...a,
-                                      cordIntegrity: e.target.value,
-                                    }
-                                  : a
-                              );
-                              setAssets(updatedAssets);
-                            }}
-                          >
-                            <option value="Pass">Pass</option>
-                            <option value="Fail">Fail</option>
-                          </select>
-                        ) : (
-                          asset.cordIntegrity
+                      {type !== "Medical Equipment" &&
+                        type !== "Electronic Appliances" && (
+                          <td>
+                            {editingAsset && editingAsset.id === asset.id ? (
+                              <select
+                                value={asset.cordIntegrity}
+                                onChange={(e) => {
+                                  const updatedAssets = assets.map((a) =>
+                                    a.id === asset.id
+                                      ? {
+                                          ...a,
+                                          cordIntegrity: e.target.value,
+                                        }
+                                      : a
+                                  );
+                                  setAssets(updatedAssets);
+                                }}
+                              >
+                                <option value="Pass">Pass</option>
+                                <option value="Fail">Fail</option>
+                              </select>
+                            ) : (
+                              asset.cordIntegrity
+                            )}
+                          </td>
                         )}
-                      </td>
                       {type === "Bed" && (
                         <>
                           <td>{asset.groundWireResistance}</td>
@@ -557,36 +345,72 @@ const Inventory = ({
                         <>
                           <td>{asset.physicalIntegrity}</td>
                           <td>{asset.polarity}</td>
-                          <td>{asset.continuityOfGround}</td>
-                          <td>{asset.groundTension}</td>
+                          <td>{asset.continuityOfGroundTension}</td>{" "}
+                          {/* New field */}
                           <td>{asset.ampacity}</td>
                         </>
                       )}
                       <td>
-                        <a
-                          href="#"
-                          className="edit"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            setEditingAsset(asset);
-                            setShowForm(true);
-                            setSelectedType(asset.type);
-                            setShowTestHistory(false);
-                          }}
-                        >
-                          Edit
-                        </a>
-                        <a
-                          href="#"
-                          className="tests"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            setEditingAsset(asset);
-                            setShowTestHistory(true);
-                          }}
-                        >
-                          Tests
-                        </a>
+                        {manageAssetId === asset.id ? (
+                          <>
+                            <button
+                              onClick={(e) => {
+                                e.preventDefault();
+                                console.log(
+                                  "Edit button clicked for asset:",
+                                  asset
+                                );
+                                setEditingAsset(asset);
+                                setShowForm(true);
+                                setSelectedType(asset.type);
+                                setShowTestHistory(false);
+                                setShowTests(false);
+                              }}
+                            >
+                              Edit
+                            </button>
+                            <button
+                              onClick={(e) => {
+                                e.preventDefault();
+                                console.log(
+                                  "Test button clicked for asset:",
+                                  asset
+                                );
+                                setEditingAsset(asset);
+                                setShowTests(true);
+                                setShowTestHistory(false);
+                              }}
+                            >
+                              Test
+                            </button>
+                            <button
+                              onClick={(e) => {
+                                e.preventDefault();
+                                console.log(
+                                  "Tests History button clicked for asset:",
+                                  asset
+                                );
+                                setEditingAsset(asset);
+                                setShowTestHistory(true);
+                                setShowTests(false);
+                              }}
+                            >
+                              Tests History
+                            </button>
+                          </>
+                        ) : (
+                          <button
+                            onClick={() => {
+                              console.log(
+                                "Manage button clicked for asset:",
+                                asset
+                              );
+                              setManageAssetId(asset.id);
+                            }}
+                          >
+                            Manage
+                          </button>
+                        )}
                       </td>
                     </tr>
                   ))}

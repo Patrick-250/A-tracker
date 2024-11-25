@@ -1,5 +1,6 @@
-import React, { useState, useRef, useEffect } from "react";
-import Webcam from "react-webcam";
+import React, { useState, useRef } from "react";
+import Camera, { FACING_MODES, IMAGE_TYPES } from "react-html5-camera-photo";
+import "react-html5-camera-photo/build/css/index.css";
 import JsBarcode from "jsbarcode";
 
 const ScanAsset = ({ onScanComplete }) => {
@@ -7,7 +8,6 @@ const ScanAsset = ({ onScanComplete }) => {
   const [scannedAsset, setScannedAsset] = useState(null);
   const [assetType, setAssetType] = useState("");
   const [showScanner, setShowScanner] = useState(false);
-  const webcamRef = useRef(null);
   const canvasRef = useRef(null);
 
   const initialAssets = [
@@ -37,12 +37,11 @@ const ScanAsset = ({ onScanComplete }) => {
     },
   ];
 
-  const handleScan = () => {
-    const imageSrc = webcamRef.current.getScreenshot();
+  const handleTakePhoto = (dataUri) => {
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d");
     const img = new Image();
-    img.src = imageSrc;
+    img.src = dataUri;
     img.onload = () => {
       context.drawImage(img, 0, 0, canvas.width, canvas.height);
       const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
@@ -72,6 +71,14 @@ const ScanAsset = ({ onScanComplete }) => {
     };
   };
 
+  const handleCameraError = (error) => {
+    console.error("Camera error:", error);
+    alert(
+      "An error occurred while accessing the camera. modern browsers do not allow access to scan APIs over http."
+    );
+    setShowScanner(false);
+  };
+
   return (
     <div className="scan-asset">
       <h1>Scan Asset</h1>
@@ -83,17 +90,28 @@ const ScanAsset = ({ onScanComplete }) => {
       </select>
       {assetType && (
         <>
-          <button onClick={() => setShowScanner(true)}>Scan with Camera</button>
+          <button
+            onClick={() => {
+              console.log("Scan with Camera clicked");
+              setShowScanner(true);
+            }}
+          >
+            Scan with Camera
+          </button>
           {showScanner && (
             <>
-              <Webcam
-                audio={false}
-                ref={webcamRef}
-                screenshotFormat="image/jpeg"
-                width="100%"
+              <Camera
+                onTakePhoto={(dataUri) => {
+                  handleTakePhoto(dataUri);
+                }}
+                onCameraError={(error) => {
+                  handleCameraError(error);
+                }}
+                idealFacingMode={FACING_MODES.ENVIRONMENT}
+                imageType={IMAGE_TYPES.JPG}
+                isFullscreen={false}
               />
               <canvas ref={canvasRef} style={{ display: "none" }} />
-              <button onClick={handleScan}>Capture</button>
             </>
           )}
         </>

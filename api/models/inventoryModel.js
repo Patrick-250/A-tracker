@@ -1,4 +1,4 @@
-// models/Inventory.js
+// models/inventoryModel.js
 const { DataTypes } = require("sequelize");
 const sequelize = require("../dataBase/db");
 
@@ -38,10 +38,8 @@ const Inventory = sequelize.define("Inventory", {
   polarity: {
     type: DataTypes.STRING,
   },
-  continuityOfGround: {
-    type: DataTypes.STRING,
-  },
-  groundTension: {
+  continuityOfGroundTension: {
+    // New field
     type: DataTypes.STRING,
   },
   ampacity: {

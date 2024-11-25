@@ -5,7 +5,10 @@ const {
   createInventoryItem,
   updateInventoryItem,
   deleteInventoryItem,
-} = require("../Controllers/inventoryController");
+  getRecentTestHistory,
+  getAllTestHistory,
+  saveTestResults,
+} = require("../controllers/inventoryController");
 
 // Endpoint to get all assets
 router.get("/", getInventoryItems);
@@ -18,5 +21,14 @@ router.put("/:id", updateInventoryItem);
 
 // Endpoint to delete an asset
 router.delete("/:id", deleteInventoryItem);
+
+// Endpoint to get recent test history for a specific asset
+router.get("/:id/test-history/recent", getRecentTestHistory);
+
+// Endpoint to get all test history for a specific asset
+router.get("/:id/test-history/all", getAllTestHistory);
+
+// Endpoint to save test results for a specific asset
+router.put("/:id/test-history", saveTestResults);
 
 module.exports = router;
