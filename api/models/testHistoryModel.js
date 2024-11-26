@@ -36,12 +36,15 @@ const TestHistory = sequelize.define("TestHistory", {
     allowNull: true,
   },
   continuityOfGroundTension: {
-    // New field
     type: DataTypes.STRING,
     allowNull: true,
   },
   ampacity: {
     type: DataTypes.STRING,
+    allowNull: true,
+  },
+  nextTestDate: {
+    type: DataTypes.DATE,
     allowNull: true,
   },
 });

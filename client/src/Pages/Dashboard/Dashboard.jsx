@@ -13,6 +13,9 @@ const Dashboard = () => {
   const [totalUpcomingMaintenance, setTotalUpcomingMaintenance] = useState(0);
   const [filterType, setFilterType] = useState("");
   const [assets, setAssets] = useState([]);
+  const [upcomingMaintenanceAssets, setUpcomingMaintenanceAssets] = useState(
+    []
+  );
 
   useEffect(() => {
     fetchData();
@@ -62,6 +65,15 @@ const Dashboard = () => {
         import.meta.env.VITE_API_BASE_URL + "/inventory"
       );
       setAssets(Array.isArray(assetsResponse.data) ? assetsResponse.data : []);
+
+      const upcomingMaintenanceResponse = await axios.get(
+        import.meta.env.VITE_API_BASE_URL + "/dashboard/upcoming-maintenance"
+      );
+      setUpcomingMaintenanceAssets(
+        Array.isArray(upcomingMaintenanceResponse.data)
+          ? upcomingMaintenanceResponse.data
+          : []
+      );
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -97,7 +109,14 @@ const Dashboard = () => {
         />
       ) : (
         <div>
-          <Inventory onAssetAdded={handleAssetAdded} assets={filteredAssets} />
+          <Inventory
+            onAssetAdded={handleAssetAdded}
+            assets={
+              filterType === "Upcoming Maintenance"
+                ? upcomingMaintenanceAssets
+                : filteredAssets
+            }
+          />
           <button className="back" onClick={handleBackClick}>
             Back
           </button>

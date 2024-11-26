@@ -1,6 +1,11 @@
 const express = require("express");
 const router = express.Router();
+const { Op } = require("sequelize");
 const Asset = require("../models/inventoryModel");
+const TestHistory = require("../models/testHistoryModel");
+const {
+  getUpcomingMaintenance,
+} = require("../controllers/inventoryController");
 
 // Endpoint to get total assets
 router.get("/total-assets", async (req, res) => {
@@ -63,8 +68,16 @@ router.get("/total-electronic-appliances", async (req, res) => {
 // Endpoint to get total upcoming maintenance
 router.get("/total-upcoming-maintenance", async (req, res) => {
   try {
-    const totalUpcomingMaintenance = await Asset.count({
-      where: { type: "Upcoming Maintenance" },
+    const currentDate = new Date();
+    const fiveMonthsLater = new Date();
+    fiveMonthsLater.setMonth(currentDate.getMonth() + 5);
+
+    const totalUpcomingMaintenance = await TestHistory.count({
+      where: {
+        nextTestDate: {
+          [Op.between]: [currentDate, fiveMonthsLater],
+        },
+      },
     });
     res.json({ totalUpcomingMaintenance });
   } catch (error) {
@@ -73,5 +86,8 @@ router.get("/total-upcoming-maintenance", async (req, res) => {
       .json({ error: "Failed to fetch total upcoming maintenance" });
   }
 });
+
+// Endpoint to get assets with upcoming maintenance
+router.get("/upcoming-maintenance", getUpcomingMaintenance);
 
 module.exports = router;

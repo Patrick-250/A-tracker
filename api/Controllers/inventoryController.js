@@ -1,5 +1,6 @@
 const Inventory = require("../models/inventoryModel");
 const TestHistory = require("../models/testHistoryModel");
+const { Op } = require("sequelize");
 
 // Get all inventory items
 exports.getInventoryItems = async (req, res) => {
@@ -113,14 +114,50 @@ exports.saveTestResults = async (req, res) => {
       chassisTouchCurrent,
       physicalIntegrity,
       polarity,
-      continuityOfGroundTension, // New field
+      continuityOfGroundTension,
       ampacity,
-    } = req.body.testResults; // Ensure we are accessing testResults
+    } = req.body.testResults;
 
     // Check for required fields
     if (!date) {
       return res.status(400).json({ error: "Missing required field: date" });
     }
+
+    // Calculate next test date
+    const calculateNextTestDate = (testDate, assetType) => {
+      const date = new Date(testDate);
+      switch (assetType) {
+        case "Bed":
+          date.setMonth(date.getMonth() + 6);
+          break;
+        case "Power Strip":
+          date.setMonth(date.getMonth() + 4);
+          break;
+        case "Medical Equipment":
+          date.setMonth(date.getMonth() + 3);
+          break;
+        case "Electronic Appliances":
+          date.setMonth(date.getMonth() + 8);
+          break;
+        default:
+          break;
+      }
+      return date.toISOString().split("T")[0]; // Format as YYYY-MM-DD
+    };
+
+    // Fetch the most recent test for the asset
+    const recentTest = await TestHistory.findOne({
+      where: { assetId: req.params.id },
+      order: [["date", "DESC"]],
+    });
+
+    // Calculate the next test date based on the most recent test
+    const nextTestDate = calculateNextTestDate(
+      recentTest.date,
+      req.body.assetType
+    );
+
+    console.log("Calculated nextTestDate:", nextTestDate);
 
     // Save the test results to the database
     const testResult = await TestHistory.create({
@@ -132,14 +169,89 @@ exports.saveTestResults = async (req, res) => {
       chassisTouchCurrent: chassisTouchCurrent || "N/A",
       physicalIntegrity: physicalIntegrity || "N/A",
       polarity: polarity || "N/A",
-      continuityOfGroundTension: continuityOfGroundTension || "N/A", // New field
+      continuityOfGroundTension: continuityOfGroundTension || "N/A",
       ampacity: ampacity || "N/A",
+      nextTestDate, // Save the calculated next test date
     });
 
     console.log("Test result saved:", testResult);
+
+    // Update the next test date for the asset in the Inventory table
+    await Inventory.update({ nextTestDate }, { where: { id: req.params.id } });
+
+    console.log("Next test date updated in Inventory table");
+
     res.status(201).json(testResult);
   } catch (error) {
     console.error("Error saving test results:", error);
     res.status(400).json({ error: "Error saving test results" });
+  }
+};
+
+// Get assets with upcoming maintenance
+exports.getUpcomingMaintenance = async (req, res) => {
+  try {
+    console.log("Fetching upcoming maintenance assets...");
+    const currentDate = new Date();
+    const fiveMonthsLater = new Date();
+    fiveMonthsLater.setMonth(currentDate.getMonth() + 5);
+
+    // Format dates as YYYY-MM-DD to exclude time component
+    const currentDateString = currentDate.toISOString().split("T")[0];
+    const fiveMonthsLaterString = fiveMonthsLater.toISOString().split("T")[0];
+
+    console.log("Current date:", currentDateString);
+    console.log("Five months later:", fiveMonthsLaterString);
+
+    // Fetch all assets
+    const assets = await Inventory.findAll();
+
+    // Initialize an array to hold assets with upcoming maintenance
+    const upcomingMaintenanceAssets = [];
+
+    // Loop through each asset to check if maintenance is due
+    for (const asset of assets) {
+      // Fetch the most recent test for the asset
+      const recentTest = await TestHistory.findOne({
+        where: { assetId: asset.id },
+        order: [["date", "DESC"]],
+      });
+
+      if (recentTest) {
+        // Calculate the next test date based on the most recent test
+        const nextTestDate = new Date(recentTest.nextTestDate);
+
+        console.log(
+          `Asset ID: ${asset.id}, Next Test Date: ${
+            nextTestDate.toISOString().split("T")[0]
+          }`
+        );
+
+        // Check if the next test date is within the next 5 months
+        if (nextTestDate >= currentDate && nextTestDate <= fiveMonthsLater) {
+          // Add the asset to the list of assets with upcoming maintenance
+          upcomingMaintenanceAssets.push({
+            asset,
+            recentTest,
+            nextTestDate: nextTestDate.toISOString().split("T")[0],
+          });
+        }
+      }
+    }
+
+    console.log(
+      "Total assets with upcoming maintenance:",
+      upcomingMaintenanceAssets.length
+    );
+    console.log(
+      "Upcoming maintenance assets fetched:",
+      upcomingMaintenanceAssets
+    );
+    res.json(upcomingMaintenanceAssets);
+  } catch (error) {
+    console.error("Error fetching upcoming maintenance assets:", error);
+    res
+      .status(500)
+      .json({ error: "Error fetching upcoming maintenance assets" });
   }
 };

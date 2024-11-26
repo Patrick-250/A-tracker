@@ -34,6 +34,27 @@ const TestHistory = ({ assetId, assetType }) => {
     }
   };
 
+  const calculateNextTestDate = (testDate, assetType) => {
+    const date = new Date(testDate);
+    switch (assetType) {
+      case "Bed":
+        date.setMonth(date.getMonth() + 6);
+        break;
+      case "Power Strip":
+        date.setMonth(date.getMonth() + 4);
+        break;
+      case "Medical Equipment":
+        date.setMonth(date.getMonth() + 3);
+        break;
+      case "Electronic Appliances":
+        date.setMonth(date.getMonth() + 8);
+        break;
+      default:
+        break;
+    }
+    return date.toISOString().split("T")[0]; // Format as YYYY-MM-DD
+  };
+
   return (
     <div className="test-history">
       <h2>Test History</h2>
@@ -55,7 +76,7 @@ const TestHistory = ({ assetId, assetType }) => {
               <>
                 <th>Physical Integrity</th>
                 <th>Polarity</th>
-                <th>Continuity of Ground Tension</th> {/* New field */}
+                <th>Continuity of Ground Tension</th>
                 <th>Ampacity</th>
               </>
             )}
@@ -65,6 +86,7 @@ const TestHistory = ({ assetId, assetType }) => {
                 <th>Asset Location</th>
               </>
             )}
+            <th>Next Test Date</th> {/* New column */}
           </tr>
         </thead>
         <tbody>
@@ -83,7 +105,7 @@ const TestHistory = ({ assetId, assetType }) => {
                 <>
                   <td>{test.physicalIntegrity}</td>
                   <td>{test.polarity}</td>
-                  <td>{test.continuityOfGroundTension}</td> {/* New field */}
+                  <td>{test.continuityOfGroundTension}</td>
                   <td>{test.ampacity}</td>
                 </>
               )}
@@ -93,6 +115,8 @@ const TestHistory = ({ assetId, assetType }) => {
                   <td>{test.assetLocation}</td>
                 </>
               )}
+              <td>{calculateNextTestDate(test.date, assetType)}</td>{" "}
+              {/* New field */}
             </tr>
           ))}
         </tbody>

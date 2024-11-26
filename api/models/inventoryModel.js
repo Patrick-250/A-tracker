@@ -39,7 +39,6 @@ const Inventory = sequelize.define("Inventory", {
     type: DataTypes.STRING,
   },
   continuityOfGroundTension: {
-    // New field
     type: DataTypes.STRING,
   },
   ampacity: {

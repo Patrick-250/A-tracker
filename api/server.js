@@ -7,6 +7,7 @@ const inventoryRoutes = require("./routes/inventoryRoutes");
 const dashboardRoutes = require("./routes/dashboardRoutes");
 const userRoutes = require("./routes/userRoutes");
 const authRoutes = require("./routes/authRoutes");
+require("./models/associations"); // Import associations
 
 dotenv.config(); // Load environment variables
 

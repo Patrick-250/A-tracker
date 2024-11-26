@@ -8,6 +8,7 @@ const {
   getRecentTestHistory,
   getAllTestHistory,
   saveTestResults,
+  getUpcomingMaintenance, // Import the new controller function
 } = require("../controllers/inventoryController");
 
 // Endpoint to get all assets
@@ -30,5 +31,8 @@ router.get("/:id/test-history/all", getAllTestHistory);
 
 // Endpoint to save test results for a specific asset
 router.put("/:id/test-history", saveTestResults);
+
+// Endpoint to get assets with upcoming maintenance
+router.get("/dashboard/upcoming-maintenance", getUpcomingMaintenance);
 
 module.exports = router;
