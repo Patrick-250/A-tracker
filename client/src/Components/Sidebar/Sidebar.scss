@@ -1,60 +1,58 @@
-.sidebar {
-  height: 100%;
-  width: 280px;
-  transition: all 0.3s ease;
-  background-color: #9ddcf9;
+/* Sidebar.scss */
 
-  // margin-top: 100px;
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  background-color: #1e596e;
+  color: white;
+  height: 100vh;
+  transition: width 0.3s ease;
+  overflow: hidden;
+
   .logo {
     display: flex;
     align-items: center;
-    justify-content: space-around;
-    gap: 3;
-    padding-top: 15px;
-    .h {
-      font-weight: bold;
-      font-size: 20px;
-      color: #ffe6b9;
-    }
-    .s-logo {
-      width: 50px; /* Adjust the width as needed */
-      height: auto; /* Maintain aspect ratio */
-      margin: 10px; /* Add some margin if needed */
-    }
-  }
-  .footer {
-    display: flex;
-    align-items: center;
     justify-content: center;
-    .copy {
-      color: gray;
+    padding: 20px;
+    img {
+      width: 40px;
+      height: 40px;
+    }
+    .h {
+      margin-left: 10px;
+      font-size: 24px;
+      font-weight: bold;
     }
   }
+
   .actions {
+    flex: 1;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20;
     .btns-c {
-      margin-top: 20px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      width: 90%;
-      padding: 15px;
-      border-radius: 5px;
+      padding: 10px 20px;
       cursor: pointer;
+      transition: background-color 0.3s ease;
+      &:hover {
+        background-color: #34495e;
+      }
       .btns {
         display: flex;
         align-items: center;
-        gap: 20px;
-        color: black;
+        span {
+          margin-left: 10px;
+          font-size: 18px;
+        }
       }
     }
-    .btns-c:hover {
-      background: color #a1a1a1;
-      color: white;
-    }
+  }
+
+  .footer {
+    padding: 20px;
+    text-align: center;
+    font-size: 14px;
+    color: gray;
   }
 }

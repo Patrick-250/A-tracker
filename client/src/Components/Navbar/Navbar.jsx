@@ -117,14 +117,6 @@ const Navbar = ({ location }) => {
                   onMouseEnter={handleMouseEnter}
                   onMouseLeave={handleMouseLeave}
                 >
-                  <span onClick={handleNotificationsClick}>
-                    <FaRegBell style={{ marginRight: "5px" }} />
-                    Notifications
-                  </span>
-                  <span onClick={handleSettingsClick}>
-                    <IoSettingsOutline style={{ marginRight: "5px" }} />
-                    Settings
-                  </span>
                   <span onClick={handleLogout}>
                     {user.name === "Guest" ? "Sign in" : "Sign out"}
                   </span>

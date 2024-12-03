@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "./Test.css"; // Import the CSS file
 
 const Test = ({ asset, saveTestResults, handleCancel }) => {
   const [testResults, setTestResults] = useState({
@@ -15,6 +16,8 @@ const Test = ({ asset, saveTestResults, handleCancel }) => {
     assetLocation: asset.assetLocation,
   });
 
+  const [isSuccess, setIsSuccess] = useState(false);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     console.log(`Input change - ${name}: ${value}`);
@@ -25,11 +28,16 @@ const Test = ({ asset, saveTestResults, handleCancel }) => {
     e.preventDefault();
     console.log("Submitting test results:", testResults);
     saveTestResults(asset.id, testResults);
+    setIsSuccess(true);
+    setTimeout(() => setIsSuccess(false), 3000); // Hide the message after 3 seconds
   };
 
   return (
     <div>
       <h2>Test Asset</h2>
+      {isSuccess && (
+        <div className="success-message">Test results saved successfully!</div>
+      )}
       <form onSubmit={handleSubmit}>
         <label>
           Date:
@@ -142,10 +150,18 @@ const Test = ({ asset, saveTestResults, handleCancel }) => {
             </label>
           </>
         )}
-        <button type="submit">Save Test Results</button>
-        <button type="button" onClick={handleCancel}>
-          Cancel
-        </button>
+        <div className="button-container">
+          <button
+            className="save-test"
+            type="submit"
+            style={{ backgroundColor: "#30638e" }}
+          >
+            Save Test
+          </button>
+          <button className="cancel" type="button" onClick={handleCancel}>
+            Cancel
+          </button>
+        </div>
       </form>
     </div>
   );

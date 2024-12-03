@@ -55,6 +55,32 @@ const TestHistory = ({ assetId, assetType }) => {
     return date.toISOString().split("T")[0]; // Format as YYYY-MM-DD
   };
 
+  const saveTestResults = async (testResults) => {
+    const nextTestDate = calculateNextTestDate(testResults.date, assetType);
+    const requestBody = {
+      ...testResults,
+      nextTestDate,
+    };
+
+    try {
+      const response = await fetch(`/api/inventory/${assetId}/test-results`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      });
+      if (response.ok) {
+        console.log("Test results saved successfully");
+        fetchRecentTestHistory();
+      } else {
+        console.error("Error saving test results");
+      }
+    } catch (error) {
+      console.error("Error saving test results:", error);
+    }
+  };
+
   return (
     <div className="test-history">
       <h2>Test History</h2>

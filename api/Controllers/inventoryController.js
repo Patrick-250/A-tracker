@@ -116,6 +116,7 @@ exports.saveTestResults = async (req, res) => {
       polarity,
       continuityOfGroundTension,
       ampacity,
+      nextTestDate, // Include nextTestDate in the request body
     } = req.body.testResults;
 
     // Check for required fields
@@ -123,41 +124,8 @@ exports.saveTestResults = async (req, res) => {
       return res.status(400).json({ error: "Missing required field: date" });
     }
 
-    // Calculate next test date
-    const calculateNextTestDate = (testDate, assetType) => {
-      const date = new Date(testDate);
-      switch (assetType) {
-        case "Bed":
-          date.setMonth(date.getMonth() + 6);
-          break;
-        case "Power Strip":
-          date.setMonth(date.getMonth() + 4);
-          break;
-        case "Medical Equipment":
-          date.setMonth(date.getMonth() + 3);
-          break;
-        case "Electronic Appliances":
-          date.setMonth(date.getMonth() + 8);
-          break;
-        default:
-          break;
-      }
-      return date.toISOString().split("T")[0]; // Format as YYYY-MM-DD
-    };
-
-    // Fetch the most recent test for the asset
-    const recentTest = await TestHistory.findOne({
-      where: { assetId: req.params.id },
-      order: [["date", "DESC"]],
-    });
-
-    // Calculate the next test date based on the most recent test
-    const nextTestDate = calculateNextTestDate(
-      recentTest.date,
-      req.body.assetType
-    );
-
-    console.log("Calculated nextTestDate:", nextTestDate);
+    console.log("Current test date:", date);
+    console.log("Next test date:", nextTestDate);
 
     // Save the test results to the database
     const testResult = await TestHistory.create({
@@ -171,7 +139,7 @@ exports.saveTestResults = async (req, res) => {
       polarity: polarity || "N/A",
       continuityOfGroundTension: continuityOfGroundTension || "N/A",
       ampacity: ampacity || "N/A",
-      nextTestDate, // Save the calculated next test date
+      nextTestDate, // Save the next test date from the request body
     });
 
     console.log("Test result saved:", testResult);
@@ -218,7 +186,10 @@ exports.getUpcomingMaintenance = async (req, res) => {
       });
 
       if (recentTest) {
-        // Calculate the next test date based on the most recent test
+        // Log the recent test details
+        console.log(`Recent test for asset ID ${asset.id}:`, recentTest);
+
+        // Use the next test date from the recent test
         const nextTestDate = new Date(recentTest.nextTestDate);
 
         console.log(
