@@ -226,3 +226,19 @@ exports.getUpcomingMaintenance = async (req, res) => {
       .json({ error: "Error fetching upcoming maintenance assets" });
   }
 };
+
+// Get an asset by its assetNumber
+exports.getAssetByNumber = async (req, res) => {
+  const { assetNumber } = req.query;
+  try {
+    const asset = await Inventory.findOne({ where: { assetNumber } });
+    if (asset) {
+      res.json(asset);
+    } else {
+      res.status(404).json({ error: "Asset not found" });
+    }
+  } catch (error) {
+    console.error("Error fetching asset:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};

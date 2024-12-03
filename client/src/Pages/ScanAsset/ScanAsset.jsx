@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+console.log("API_BASE_URL:", API_BASE_URL); // Debugging statement
 
 const ScanAsset = () => {
   const [scannedAsset, setScannedAsset] = useState(null);
@@ -29,8 +31,10 @@ const ScanAsset = () => {
 
   const fetchAssetDetails = async (barcode) => {
     try {
+      const url = `${API_BASE_URL}/inventory/asset?assetNumber=${barcode}`;
       console.log("Fetching asset details for barcode:", barcode); // Debugging statement
-      const response = await axios.get(`${API_BASE_URL}/inventory/${barcode}`);
+      console.log("Request URL:", url); // Debugging statement
+      const response = await axios.get(url);
       console.log("Response received:", response); // Debugging statement
 
       // Check if the response is JSON
@@ -59,7 +63,7 @@ const ScanAsset = () => {
 
   return (
     <div>
-      <h1>Scan Asset</h1>
+      <h1>Scan barcode or Input the asset number</h1>
       <input
         type="text"
         value={barcode}
@@ -76,20 +80,64 @@ const ScanAsset = () => {
           <p>Asset Location: {scannedAsset.assetLocation}</p>
           {scannedAsset.type === "Bed" && (
             <>
-              <p>Cord Integrity: {scannedAsset.cordIntegrity}</p>
-              <p>Ground Wire Resistance: {scannedAsset.groundWireResistance}</p>
-              <p>Ground Leakage Current: {scannedAsset.groundLeakageCurrent}</p>
-              <p>Chassis Touch Current: {scannedAsset.chassisTouchCurrent}</p>
+              {scannedAsset.cordIntegrity && (
+                <p>Cord Integrity: {scannedAsset.cordIntegrity}</p>
+              )}
+              {scannedAsset.groundWireResistance && (
+                <p>
+                  Ground Wire Resistance: {scannedAsset.groundWireResistance}
+                </p>
+              )}
+              {scannedAsset.groundLeakageCurrent && (
+                <p>
+                  Ground Leakage Current: {scannedAsset.groundLeakageCurrent}
+                </p>
+              )}
+              {scannedAsset.chassisTouchCurrent && (
+                <p>Chassis Touch Current: {scannedAsset.chassisTouchCurrent}</p>
+              )}
             </>
           )}
           {scannedAsset.type === "Power Strip" && (
             <>
-              <p>Cord Integrity: {scannedAsset.cordIntegrity}</p>
-              <p>Physical Integrity: {scannedAsset.physicalIntegrity}</p>
-              <p>Polarity: {scannedAsset.polarity}</p>
-              <p>Continuity of Ground: {scannedAsset.continuityOfGround}</p>
-              <p>Ground Tension: {scannedAsset.groundTension}</p>
-              <p>Ampacity: {scannedAsset.ampacity}</p>
+              {scannedAsset.cordIntegrity && (
+                <p>Cord Integrity: {scannedAsset.cordIntegrity}</p>
+              )}
+              {scannedAsset.physicalIntegrity && (
+                <p>Physical Integrity: {scannedAsset.physicalIntegrity}</p>
+              )}
+              {scannedAsset.polarity && (
+                <p>Polarity: {scannedAsset.polarity}</p>
+              )}
+              {scannedAsset.continuityOfGround && (
+                <p>Continuity of Ground: {scannedAsset.continuityOfGround}</p>
+              )}
+              {scannedAsset.groundTension && (
+                <p>Ground Tension: {scannedAsset.groundTension}</p>
+              )}
+              {scannedAsset.ampacity && (
+                <p>Ampacity: {scannedAsset.ampacity}</p>
+              )}
+            </>
+          )}
+          {scannedAsset.type === "Medical Equipment" && (
+            <>
+              {scannedAsset.cordIntegrity && (
+                <p>Cord Integrity: {scannedAsset.cordIntegrity}</p>
+              )}
+              {scannedAsset.groundWireResistance && (
+                <p>
+                  Ground Wire Resistance: {scannedAsset.groundWireResistance}
+                </p>
+              )}
+              {scannedAsset.groundLeakageCurrent && (
+                <p>
+                  Ground Leakage Current: {scannedAsset.groundLeakageCurrent}
+                </p>
+              )}
+              {scannedAsset.chassisTouchCurrent && (
+                <p>Chassis Touch Current: {scannedAsset.chassisTouchCurrent}</p>
+              )}
             </>
           )}
         </div>

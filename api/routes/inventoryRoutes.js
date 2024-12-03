@@ -8,11 +8,15 @@ const {
   getRecentTestHistory,
   getAllTestHistory,
   saveTestResults,
-  getUpcomingMaintenance, // Import the new controller function
+  getUpcomingMaintenance,
+  getAssetByNumber, // Import the new controller function
 } = require("../controllers/inventoryController");
 
 // Endpoint to get all assets
 router.get("/", getInventoryItems);
+
+// Endpoint to get an asset by its assetNumber
+router.get("/asset", getAssetByNumber);
 
 // Endpoint to add a new asset
 router.post("/", createInventoryItem);
