@@ -1,9 +1,27 @@
 .layout {
   display: flex;
-  align-items: center;
+  align-items: flex-start; /* Align items to the start to ensure full height */
   justify-content: space-between;
   gap: "10px";
+  height: 100vh; /* Make the layout take the full height of the viewport */
+
   .main {
     flex: 4;
+    padding-top: 60px; /* Adjust this value based on the height of your navbar */
+    overflow-y: auto; /* Ensure the main content is scrollable */
+    height: 100vh; /* Ensure the main content takes the full height of the viewport */
+  }
+
+  .sidebar {
+    display: flex;
+    flex-direction: column;
+    background-color: #1e596e;
+    color: white;
+    height: 100vh; /* Make the sidebar take the full height of the viewport */
+    transition: width 0.3s ease;
+    position: fixed; /* Make the sidebar fixed */
+    top: 0;
+    left: 0;
+    width: 100px; /* Adjust the width as needed */
   }
 }

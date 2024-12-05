@@ -1,21 +1,21 @@
 .inventory {
   padding: 20px;
-  background-color: #f9f9f9;
-  margin-top: 210px;
+  background-color: white;
 }
 
 .add-asset {
-  background-color: #9ddcf9;
-  color: white;
+  background-color: #e0efd4;
+  color: black;
   padding: 10px 20px;
   border: none;
-  border-radius: 5px;
+  border-radius: 30px;
   cursor: pointer;
   margin-bottom: 20px;
 }
 
 .add-asset:hover {
-  background-color: #007bff;
+  background-color: #e0efd4;
+  text-decoration: underline;
 }
 
 .asset-table {
@@ -65,7 +65,8 @@ button {
 }
 
 button:hover {
-  background-color: #45a049;
+  background-color: #e0efd4;
+  text-decoration: underline;
 }
 
 button:disabled {

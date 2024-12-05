@@ -189,7 +189,7 @@ const ScanAsset = () => {
     <div>
       {!editingAsset && !showTestHistory && !showTests && (
         <>
-          <h1>Scan barcode or Input the asset number</h1>
+          <h1>Scan barcode or Input A-number</h1>
           <input
             type="text"
             value={barcode}

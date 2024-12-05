@@ -38,7 +38,7 @@ const Card = ({
             </span>
           </div>
           <div className="icon">
-            <FaBed size={25} color="red" />
+            <FaBed size={25} color="#7F5D00" />
           </div>
         </div>
       </div>
@@ -90,7 +90,7 @@ const Card = ({
             </span>
           </div>
           <div className="icon">
-            <FaStethoscope size={25} color="blue" />
+            <FaStethoscope size={25} color="#1e596e" />
           </div>
         </div>
       </div>

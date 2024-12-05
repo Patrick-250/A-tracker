@@ -1,3 +1,8 @@
+h1 {
+  color: #1e596e;
+  margin-left: 0px;
+}
+
 .asset-details {
   display: flex;
   flex-direction: column;
@@ -16,7 +21,7 @@
 
 .asset-details h2 {
   margin-top: 0;
-  color: #333;
+  color: #9ddcf9;
 }
 
 .asset-details table {

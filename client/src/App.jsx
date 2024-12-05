@@ -16,20 +16,22 @@ import Home from "./Pages/Home/Home";
 import Notifications from "./Pages/Notifications/Notifications";
 import ReportBug from "./Pages/ReportBug/ReportBug"; // Import ReportBug component
 import { useSelector } from "react-redux";
+import "./App.css";
 
 function App() {
-  // const user = useSelector((state) => state.auth.user); // Get user from Redux store
-  const user = true;
+  const user = useSelector((state) => state.auth.user); // Get user from Redux store
   const [scannedAsset, setScannedAsset] = useState(null); // State for scanned asset
 
   return (
-    <Router>
-      <AppContent
-        user={user}
-        scannedAsset={scannedAsset}
-        setScannedAsset={setScannedAsset}
-      />
-    </Router>
+    <div className="app-background">
+      <Router>
+        <AppContent
+          user={user}
+          scannedAsset={scannedAsset}
+          setScannedAsset={setScannedAsset}
+        />
+      </Router>
+    </div>
   );
 }
 
@@ -42,29 +44,69 @@ function AppContent({ user, scannedAsset, setScannedAsset }) {
       location.pathname !== "/scan-asset" ? (
         <Layout>
           <Routes>
-            <Route path="/" element={user ? <Home /> : <Login />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/settings" element={<Settings />} />
+            <Route
+              path="/"
+              element={user ? <Home /> : <Navigate to="/login" />}
+            />
             <Route path="/login" element={<Login />} />
             <Route
+              path="/dashboard"
+              element={user ? <Dashboard /> : <Navigate to="/login" />}
+            />
+            <Route
+              path="/settings"
+              element={user ? <Settings /> : <Navigate to="/login" />}
+            />
+            <Route
               path="/inventory"
-              element={<Inventory scannedAsset={scannedAsset} />}
+              element={
+                user ? (
+                  <Inventory scannedAsset={scannedAsset} />
+                ) : (
+                  <Navigate to="/login" />
+                )
+              }
             />
             <Route
               path="/scan-asset"
-              element={<ScanAsset onScanComplete={setScannedAsset} />}
+              element={
+                user ? (
+                  <ScanAsset onScanComplete={setScannedAsset} />
+                ) : (
+                  <Navigate to="/login" />
+                )
+              }
             />
-            <Route path="/notifications" element={<Notifications />} />
-            <Route path="/report-bug" element={<ReportBug />} />
+            <Route
+              path="/notifications"
+              element={user ? <Notifications /> : <Navigate to="/login" />}
+            />
+            <Route
+              path="/report-bug"
+              element={user ? <ReportBug /> : <Navigate to="/login" />}
+            />
+            {/* Catch-all route to redirect to login if the route doesn't exist */}
+            <Route path="*" element={<Navigate to="/login" />} />
           </Routes>
         </Layout>
       ) : (
         <Routes>
-          <Route path="/report-bug" element={<ReportBug />} />
+          <Route
+            path="/report-bug"
+            element={user ? <ReportBug /> : <Navigate to="/login" />}
+          />
           <Route
             path="/scan-asset"
-            element={<ScanAsset onScanComplete={setScannedAsset} />}
+            element={
+              user ? (
+                <ScanAsset onScanComplete={setScannedAsset} />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
           />
+          {/* Catch-all route to redirect to login if the route doesn't exist */}
+          <Route path="*" element={<Navigate to="/login" />} />
         </Routes>
       )}
     </>

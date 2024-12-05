@@ -174,10 +174,9 @@ const Sidebar = () => {
         {!hide && (
           <span
             style={{
-              color: active === "dashboard" ? "white" : "gray",
+              color: active === "dashboard" ? "#fdb913" : "#ffe6b9",
               marginRight: 40,
               fontSize: "15px",
-              color: "gray",
             }}
           >
             Copyright QLI 2024

@@ -2,13 +2,19 @@
   padding: 20px;
   // font-family: gotham;
   background-color: #449aba;
-
   height: 100vh;
   overflow-y: scroll;
   padding-top: 100px;
 }
 .back {
-  background-color: white;
+  background-color: #e0efd4;
   margin-top: 40px;
   cursor: pointer;
+  font-size: larger;
+  color: black;
+}
+.back:hover {
+  background-color: #e0efd4;
+  color: black;
+  text-decoration: underline;
 }

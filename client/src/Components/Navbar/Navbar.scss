@@ -66,13 +66,6 @@
       align-items: center;
       position: relative;
 
-      .avator {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        cursor: pointer;
-      }
-
       .pop {
         position: absolute;
         top: 50px;
@@ -87,10 +80,11 @@
           display: block;
           padding: 10px;
           cursor: pointer;
-          transition: background-color 0.3s ease;
+          background-color: #e0efd4;
 
           &:hover {
-            background-color: #f1f1f1;
+            background-color: #e0efd4;
+            text-decoration: underline;
           }
 
           svg {
@@ -100,17 +94,11 @@
       }
 
       .name {
-        margin-left: 10px;
-        font-size: 16px;
+        font-size: 27px;
+        color: white;
+        font-family: "Adobe Garamond Pro", Garamond, serif;
+        text-decoration: dotted underline;
       }
     }
-  }
-
-  .settings-content,
-  .notifications-content {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
   }
 }

@@ -12,8 +12,7 @@ const Layout = ({ children }) => {
     <div className="layout">
       {/* Sidebar goes here */}
       <Sidebar />
-      <main className="main">
-        {/* header goes here */}
+      <main className="main" style={{ paddingLeft: "290px" }}>
         <Navbar location={location} />
         {children}
       </main>

@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { setSelected } from "../../Redux/Selected";
 import { clearUser } from "../../Redux/auth";
 import { FaRegBell } from "react-icons/fa";
+import { FaUserCircle } from "react-icons/fa";
 import Badge from "@mui/material/Badge";
 import { useState, useRef, useEffect } from "react";
 
@@ -57,7 +58,7 @@ const Navbar = ({ location }) => {
     setShowSettings(true);
     setShowNotifications(false); // Hide notifications when settings are shown
     dispatch(setSelected("User Profile"));
-    navigate("/Settings");
+    navigate("/settings");
   };
 
   const handleNotificationsClick = () => {
@@ -89,26 +90,16 @@ const Navbar = ({ location }) => {
             <span className="head">{selected.value}</span>
           </div>
           <div className="middle">
-            {location.pathname !== "/" &&
-              location.pathname !== "/dashboard" && ( // Conditionally render the search input
-                <div className="input">
-                  <LuSearch style={{ fontSize: "25px", color: "gray" }} />
-                  <div className="search">
-                    <input
-                      type="text"
-                      className="s"
-                      placeholder="search inventory..."
-                    />
-                  </div>
-                </div>
-              )}
             <hr className="hr" />
             <div className="profile">
               <IconButton
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
               >
-                <img src="/images/avator.jpeg" alt="" className="avator" />
+                <FaUserCircle
+                  className="avator-placeholder"
+                  style={{ fontSize: "50px", color: "#1e596e" }}
+                />
               </IconButton>
               {/* popup */}
               {show && (
@@ -136,7 +127,7 @@ const Navbar = ({ location }) => {
               style={{ fontSize: "25px", color: "gray", cursor: "pointer" }}
               onClick={() => {
                 dispatch(setSelected("User Profile"));
-                navigate("/Settings");
+                navigate("/settings");
               }}
             />
           </IconButton>
