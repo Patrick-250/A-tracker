@@ -16,6 +16,7 @@ const TestHistory = ({ assetId, assetType }) => {
       );
       const data = await response.json();
       setTestHistory(data);
+      setShowAll(false);
     } catch (error) {
       console.error("Error fetching recent test history:", error);
     }
@@ -84,8 +85,11 @@ const TestHistory = ({ assetId, assetType }) => {
   return (
     <div className="test-history">
       <h2>Test History</h2>
-      <button onClick={fetchRecentTestHistory}>Show Recent Tests</button>
-      <button onClick={fetchAllTestHistory}>See More Tests</button>
+      {showAll ? (
+        <button onClick={fetchRecentTestHistory}>Show Recent Tests</button>
+      ) : (
+        <button onClick={fetchAllTestHistory}>See More Tests</button>
+      )}
       <table className="test-history-table">
         <thead>
           <tr>

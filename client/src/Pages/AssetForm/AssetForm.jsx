@@ -27,6 +27,7 @@ const AssetForm = ({
               placeholder="Asset Number"
               value={asset.assetNumber}
               onChange={handleInputChange}
+              disabled={isEditing} // Disable when editing
             />
             <input
               type="text"
@@ -82,6 +83,7 @@ const AssetForm = ({
               placeholder="Plug Strip Asset Number"
               value={asset.assetNumber}
               onChange={handleInputChange}
+              disabled={isEditing} // Disable when editing
             />
             <input
               type="text"
@@ -149,6 +151,7 @@ const AssetForm = ({
               placeholder="Asset Number"
               value={asset.assetNumber}
               onChange={handleInputChange}
+              disabled={isEditing} // Disable when editing
             />
             <input
               type="text"
@@ -182,6 +185,7 @@ const AssetForm = ({
               placeholder="Asset Number"
               value={asset.assetNumber}
               onChange={handleInputChange}
+              disabled={isEditing} // Disable when editing
             />
             <input
               type="text"
@@ -207,7 +211,12 @@ const AssetForm = ({
 
   return (
     <div className="form">
-      <select name="type" value={selectedType} onChange={handleInputChange}>
+      <select
+        name="type"
+        value={selectedType}
+        onChange={handleInputChange}
+        disabled={isEditing} // Disable when editing
+      >
         <option value="">Select Asset Type</option>
         <option value="Bed">Bed</option>
         <option value="Power Strip">Power Strip</option>

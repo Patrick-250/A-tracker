@@ -185,6 +185,12 @@ const ScanAsset = () => {
     }
   };
 
+  const handleCancelSearch = () => {
+    setBarcode("");
+    setScannedAsset(null);
+    setManageAssetId(null);
+  };
+
   return (
     <div>
       {!editingAsset && !showTestHistory && !showTests && (
@@ -359,16 +365,35 @@ const ScanAsset = () => {
               >
                 Tests History
               </button>
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  console.log("Cancel button clicked");
+                  handleCancelSearch();
+                }}
+              >
+                Cancel
+              </button>
             </div>
           ) : (
-            <button
-              onClick={() => {
-                console.log("Manage button clicked for asset:", scannedAsset);
-                setManageAssetId(scannedAsset.id);
-              }}
-            >
-              Manage
-            </button>
+            <div className="button-container">
+              <button
+                onClick={() => {
+                  console.log("Manage button clicked for asset:", scannedAsset);
+                  setManageAssetId(scannedAsset.id);
+                }}
+              >
+                Manage
+              </button>
+              <button
+                onClick={() => {
+                  console.log("Cancel button clicked");
+                  handleCancelSearch();
+                }}
+              >
+                Cancel
+              </button>
+            </div>
           )}
         </div>
       )}

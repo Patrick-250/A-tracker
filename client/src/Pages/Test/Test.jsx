@@ -12,8 +12,6 @@ const Test = ({ asset, saveTestResults, handleCancel }) => {
     polarity: asset.polarity,
     continuityOfGroundTension: asset.continuityOfGroundTension, // New field
     ampacity: asset.ampacity,
-    assetNumber: asset.assetNumber,
-    assetLocation: asset.assetLocation,
   });
 
   const [isSuccess, setIsSuccess] = useState(false);
@@ -123,28 +121,6 @@ const Test = ({ asset, saveTestResults, handleCancel }) => {
                 type="text"
                 name="ampacity"
                 value={testResults.ampacity}
-                onChange={handleInputChange}
-              />
-            </label>
-          </>
-        )}
-        {asset.type === "Medical Equipment" && (
-          <>
-            <label>
-              Asset Number:
-              <input
-                type="text"
-                name="assetNumber"
-                value={testResults.assetNumber}
-                onChange={handleInputChange}
-              />
-            </label>
-            <label>
-              Asset Location:
-              <input
-                type="text"
-                name="assetLocation"
-                value={testResults.assetLocation}
                 onChange={handleInputChange}
               />
             </label>
